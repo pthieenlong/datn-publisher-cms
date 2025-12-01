@@ -1,0 +1,30 @@
+@import "@/assets/variables.scss";
+
+.dashboard-page {
+  .dashboard-header {
+    margin-bottom: $spacing-xl;
+
+    .dashboard-title {
+      margin: 0 0 $spacing-sm 0;
+      font-weight: 600;
+      color: $text-primary;
+    }
+
+    .dashboard-description {
+      color: $text-secondary;
+      font-size: 14px;
+    }
+  }
+
+  .dashboard-stats {
+    margin-bottom: $spacing-xl;
+  }
+
+  .dashboard-chart {
+    margin-bottom: $spacing-xl;
+  }
+
+  .dashboard-activity {
+    margin-bottom: $spacing-xl;
+  }
+}

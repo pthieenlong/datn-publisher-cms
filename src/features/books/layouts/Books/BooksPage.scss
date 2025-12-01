@@ -1,0 +1,87 @@
+@import "@/assets/variables.scss";
+
+.books-page {
+  padding: $spacing-lg;
+  background-color: $white;
+
+  .books-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: $spacing-lg;
+    padding-bottom: $spacing-lg;
+    border-bottom: 1px solid $border-color;
+
+    .books-header-content {
+      flex: 1;
+
+      .books-title {
+        margin: 0 0 $spacing-sm 0;
+        font-family: "Poppins", sans-serif;
+        font-weight: 600;
+        color: $text-primary;
+      }
+
+      .books-description {
+        color: $text-secondary;
+        font-family: "Poppins", sans-serif;
+        font-weight: 400;
+      }
+    }
+
+    .books-add-button {
+      border-radius: $radius-md;
+      height: auto;
+      padding: $spacing-sm $spacing-lg;
+      font-family: "Poppins", sans-serif;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+    }
+  }
+
+  .books-toolbar {
+    margin-bottom: $spacing-lg;
+    padding: $spacing-lg;
+    background-color: $bg-gray-50;
+    border: 1px solid $border-color;
+    border-radius: $radius-lg;
+
+    .books-search-input {
+      border-radius: $radius-sm;
+
+      .ant-input {
+        border-radius: $radius-sm;
+        font-family: "Poppins", sans-serif;
+        font-weight: 400;
+      }
+    }
+
+    .books-filter-select {
+      .ant-select-selector {
+        border-radius: $radius-sm;
+        font-family: "Poppins", sans-serif;
+        font-weight: 400;
+      }
+    }
+
+    .books-filter-button,
+    .books-export-button {
+      border-radius: $radius-md;
+      font-family: "Poppins", sans-serif;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+      border: 1px solid $border-color;
+    }
+  }
+
+  .books-table-container {
+    background-color: $white;
+    border: 1px solid $border-color;
+    border-radius: $radius-lg;
+    overflow: hidden;
+  }
+}

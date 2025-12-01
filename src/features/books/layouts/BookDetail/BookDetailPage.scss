@@ -1,0 +1,259 @@
+@import "@/assets/variables.scss";
+
+.book-detail-page {
+  padding: $spacing-lg;
+  background-color: $white;
+
+  .book-detail-header {
+    margin-bottom: $spacing-lg;
+    padding-bottom: $spacing-lg;
+    border-bottom: 1px solid $border-color;
+
+    .book-detail-back-button {
+      border-radius: $radius-md;
+      font-family: "Poppins", sans-serif;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+      border: 1px solid $border-color;
+    }
+
+    .book-detail-title {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      font-weight: 600;
+      color: $text-primary;
+    }
+  }
+
+  .book-detail-actions {
+    margin-bottom: $spacing-lg;
+    padding: $spacing-lg;
+    background-color: $bg-gray-50;
+    border: 1px solid $border-color;
+    border-radius: $radius-lg;
+
+    .book-detail-action-button {
+      border-radius: $radius-md;
+      font-family: "Poppins", sans-serif;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+      height: auto;
+      padding: $spacing-sm $spacing-lg;
+    }
+  }
+
+  .book-detail-stats {
+    margin-bottom: $spacing-lg;
+
+    .book-detail-stat-card {
+      border: 1px solid $border-color;
+      border-radius: $radius-lg;
+      font-family: "Poppins", sans-serif;
+
+      .ant-statistic-title {
+        font-family: "Poppins", sans-serif;
+        font-weight: 400;
+        color: $text-secondary;
+        font-size: 14px;
+      }
+
+      .ant-statistic-content {
+        font-family: "Poppins", sans-serif;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .book-detail-info {
+    margin-bottom: $spacing-lg;
+
+    .book-detail-info-card {
+      border: 1px solid $border-color;
+      border-radius: $radius-lg;
+
+      .book-detail-cover {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+
+        .book-detail-cover-image {
+          width: 100%;
+          max-width: 300px;
+          height: auto;
+          border-radius: $radius-lg;
+          border: 1px solid $border-color;
+          object-fit: cover;
+        }
+      }
+
+      .book-detail-content {
+        .book-detail-content-title {
+          margin: 0 0 $spacing-sm 0;
+          font-family: "Poppins", sans-serif;
+          font-weight: 600;
+          color: $text-primary;
+        }
+
+        .book-detail-content-slug {
+          display: block;
+          margin-bottom: $spacing-lg;
+          color: $text-secondary;
+          font-family: "Poppins", sans-serif;
+          font-weight: 400;
+          font-size: 14px;
+        }
+
+        .book-detail-content-description {
+          margin-bottom: $spacing-lg;
+          padding: $spacing-lg;
+          background-color: $bg-gray-50;
+          border: 1px solid $border-color;
+          border-radius: $radius-sm;
+
+          .ant-typography {
+            font-family: "Poppins", sans-serif;
+            font-weight: 400;
+            color: $text-primary;
+            line-height: 1.6;
+          }
+        }
+
+        .book-detail-content-meta {
+          display: flex;
+          flex-direction: column;
+          gap: $spacing-md;
+
+          .book-detail-meta-item {
+            display: flex;
+            align-items: center;
+            gap: $spacing-sm;
+            font-family: "Poppins", sans-serif;
+
+            .ant-typography {
+              font-family: "Poppins", sans-serif;
+              font-weight: 400;
+              color: $text-primary;
+            }
+
+            .ant-typography-strong {
+              font-weight: 500;
+              color: $text-primary;
+              min-width: 120px;
+            }
+          }
+
+          .book-detail-category-tag {
+            border-radius: $radius-sm;
+            font-family: "Poppins", sans-serif;
+            font-weight: 400;
+            border: 1px solid $border-color;
+          }
+        }
+      }
+    }
+  }
+
+  .book-detail-bottom {
+    .book-detail-pricing-card,
+    .book-detail-chapters-card {
+      border: 1px solid $border-color;
+      border-radius: $radius-lg;
+      height: 100%;
+
+      .book-detail-section-title {
+        margin: 0 0 $spacing-lg 0;
+        font-family: "Poppins", sans-serif;
+        font-weight: 600;
+        color: $text-primary;
+        font-size: 18px;
+      }
+    }
+
+    .book-detail-pricing-content {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-md;
+
+      .book-detail-price-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: $spacing-md;
+        background-color: $bg-gray-50;
+        border: 1px solid $border-color;
+        border-radius: $radius-sm;
+        font-family: "Poppins", sans-serif;
+
+        .book-detail-price-label {
+          font-weight: 500;
+          color: $text-primary;
+        }
+
+        .book-detail-price-value {
+          font-weight: 600;
+          color: $text-primary;
+
+          &.book-detail-original-price {
+            text-decoration: line-through;
+            color: $text-secondary;
+          }
+
+          &.book-detail-sale-percent {
+            color: $error-color;
+          }
+
+          &.book-detail-sale-price {
+            color: $success-color;
+            font-size: 18px;
+          }
+        }
+
+        .book-detail-status-tag {
+          border-radius: $radius-sm;
+          font-family: "Poppins", sans-serif;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+
+  .book-detail-edit {
+    margin-top: $spacing-lg;
+
+    .book-detail-edit-card {
+      border: 1px solid $border-color;
+      border-radius: $radius-lg;
+
+      .book-detail-section-title {
+        margin: 0 0 $spacing-lg 0;
+        font-family: "Poppins", sans-serif;
+        font-weight: 600;
+        color: $text-primary;
+      }
+
+      .book-detail-switch-group {
+        display: flex;
+        gap: $spacing-lg;
+        padding: $spacing-md;
+        border: 1px dashed $border-color;
+        border-radius: $radius-md;
+        background-color: $bg-gray-50;
+
+        .ant-form-item {
+          margin-bottom: 0;
+        }
+      }
+
+      .book-detail-edit-actions {
+        margin-top: $spacing-lg;
+        display: flex;
+        justify-content: flex-end;
+      }
+    }
+  }
+}
+

@@ -1,0 +1,39 @@
+@import "@/assets/variables.scss";
+
+.recent-activity-card {
+  border-radius: $radius-lg;
+  border: 1px solid $border-color;
+
+  .ant-card-body {
+    padding: $spacing-lg;
+  }
+
+  .recent-activity-title {
+    margin: 0 0 $spacing-lg 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: $text-primary;
+  }
+
+  .recent-activity-table {
+    .ant-table {
+      border: 1px solid $border-color;
+      border-radius: $radius-sm;
+    }
+
+    .ant-table-thead > tr > th {
+      background-color: $bg-gray-50;
+      border-bottom: 1px solid $border-color;
+      font-weight: 500;
+      color: $text-primary;
+    }
+
+    .ant-table-tbody > tr > td {
+      border-bottom: 1px solid $border-color;
+    }
+
+    .ant-table-tbody > tr:hover > td {
+      background-color: $bg-gray-50;
+    }
+  }
+}

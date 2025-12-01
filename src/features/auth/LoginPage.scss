@@ -1,0 +1,79 @@
+@import "@/assets/variables.scss";
+
+.login-page {
+  min-height: 100vh;
+  background: $bg-gray-50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-lg;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  background: $white;
+  border: 1px solid $border-color;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+  box-shadow: none;
+}
+
+.login-card__header {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+
+  h2.ant-typography {
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    margin: 0;
+    color: $text-primary;
+  }
+
+  span.ant-typography {
+    color: $text-secondary;
+    font-size: 14px;
+  }
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+
+  .ant-form-item-label > label {
+    font-weight: 500;
+    color: $text-secondary;
+  }
+
+  .ant-input-affix-wrapper {
+    border-radius: $radius-sm;
+    border: 1px solid $border-color;
+    padding: 0 $spacing-md;
+  }
+
+  .ant-input {
+    font-family: "Poppins", sans-serif;
+  }
+}
+
+.login-submit-btn {
+  border-radius: $radius-md;
+  height: 48px;
+  font-weight: 600;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .login-page {
+    padding: $spacing-md;
+  }
+
+  .login-card {
+    padding: $spacing-md;
+  }
+}
+

@@ -1,0 +1,53 @@
+// SCSS Variables
+// These variables are available globally
+
+// Colors - Primary
+$primary-color: #3b82f6;
+$primary-hover: #2563eb;
+$primary-light: #eff6ff;
+$primary-light-100: #dbeafe;
+
+// Colors - Success
+$success-color: #22c55e;
+$success-hover: #16a34a;
+$success-light: #dcfce7;
+
+// Colors - Error/Danger
+$error-color: #ef4444;
+$error-hover: #dc2626;
+$error-light: #fee2e2;
+
+// Colors - Neutral
+$white: #ffffff;
+$bg-gray-50: #f9fafb;
+$bg-gray-100: #f3f4f6;
+$border-color: #e5e7eb; // neutral-700 equivalent
+$text-primary: #1f2937;
+$text-secondary: #6b7280;
+$text-tertiary: #9ca3af;
+
+// Layout Dimensions
+$sidebar-width: 240px;
+$header-height: 64px;
+$footer-height: auto;
+
+// Spacing
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 12px;
+$spacing-lg: 16px;
+$spacing-xl: 24px;
+$spacing-xxl: 32px;
+
+// Border Radius
+$radius-sm: 8px; // Input
+$radius-md: 12px; // Button
+$radius-lg: 16px; // Card
+
+// Breakpoints
+$breakpoint-xs: 480px;
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+$breakpoint-xxl: 1600px;

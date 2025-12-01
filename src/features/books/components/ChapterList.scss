@@ -1,0 +1,55 @@
+@import "@/assets/variables.scss";
+
+.chapter-list {
+  .chapter-table {
+    font-family: "Poppins", sans-serif;
+
+    .ant-table-thead > tr > th {
+      font-family: "Poppins", sans-serif;
+      font-weight: 500;
+      color: $text-primary;
+      background-color: $bg-gray-50;
+      border-bottom: 1px solid $border-color;
+    }
+
+    .ant-table-tbody > tr > td {
+      font-family: "Poppins", sans-serif;
+      font-weight: 400;
+      color: $text-primary;
+      border-bottom: 1px solid $border-color;
+    }
+
+    .chapter-number {
+      font-weight: 600;
+      color: $text-primary;
+    }
+
+    .chapter-title {
+      font-weight: 500;
+      color: $text-primary;
+    }
+
+    .chapter-date {
+      color: $text-secondary;
+      font-size: 14px;
+    }
+
+    .chapter-status-tag {
+      border-radius: $radius-sm;
+      font-family: "Poppins", sans-serif;
+      font-weight: 400;
+      border: 1px solid $border-color;
+    }
+
+    .chapter-action-button {
+      font-family: "Poppins", sans-serif;
+      font-weight: 400;
+      padding: 0;
+      height: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: $spacing-xs;
+    }
+  }
+}
+

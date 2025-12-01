@@ -1,0 +1,81 @@
+@import "@/assets/variables.scss";
+
+.orders-page {
+  padding: $spacing-lg;
+  background-color: $white;
+
+  .orders-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: $spacing-lg;
+    padding-bottom: $spacing-lg;
+    border-bottom: 1px solid $border-color;
+
+    .orders-header-content {
+      flex: 1;
+
+      .orders-title {
+        margin: 0 0 $spacing-sm 0;
+        font-family: "Poppins", sans-serif;
+        font-weight: 600;
+        color: $text-primary;
+      }
+
+      .orders-description {
+        color: $text-secondary;
+        font-family: "Poppins", sans-serif;
+        font-weight: 400;
+      }
+    }
+  }
+
+  .orders-toolbar {
+    margin-bottom: $spacing-lg;
+    padding: $spacing-lg;
+    background-color: $bg-gray-50;
+    border: 1px solid $border-color;
+    border-radius: $radius-lg;
+
+    .orders-search-input {
+      border-radius: $radius-sm;
+
+      .ant-input {
+        border-radius: $radius-sm;
+        font-family: "Poppins", sans-serif;
+        font-weight: 400;
+      }
+    }
+
+    .orders-filter-select {
+      .ant-select-selector {
+        border-radius: $radius-sm;
+        font-family: "Poppins", sans-serif;
+        font-weight: 400;
+      }
+    }
+
+    .orders-filter-button {
+      border-radius: $radius-md;
+      font-family: "Poppins", sans-serif;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+      border: 1px solid $border-color;
+    }
+  }
+
+  .orders-table-container {
+    background-color: $white;
+    border: 1px solid $border-color;
+    border-radius: $radius-lg;
+    overflow: hidden;
+  }
+
+  .orders-error-alert {
+    margin-bottom: $spacing-lg;
+    border-radius: $radius-sm;
+    font-family: "Poppins", sans-serif;
+  }
+}

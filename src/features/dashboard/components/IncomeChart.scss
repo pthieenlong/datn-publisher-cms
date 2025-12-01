@@ -1,0 +1,34 @@
+@import "@/assets/variables.scss";
+
+.income-chart-card {
+  border-radius: $radius-lg;
+  border: 1px solid $border-color;
+
+  .ant-card-body {
+    padding: $spacing-lg;
+  }
+
+  .income-chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $spacing-lg;
+
+    .income-chart-title {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: $text-primary;
+    }
+
+    .income-chart-tabs {
+      .ant-tabs-tab {
+        padding: $spacing-sm $spacing-md;
+      }
+    }
+  }
+
+  .income-chart-content {
+    margin-top: $spacing-lg;
+  }
+}
