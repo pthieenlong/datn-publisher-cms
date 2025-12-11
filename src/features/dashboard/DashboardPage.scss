@@ -27,4 +27,11 @@
   .dashboard-activity {
     margin-bottom: $spacing-xl;
   }
+
+  .dashboard-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+  }
 }

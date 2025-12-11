@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Card, Tabs } from "antd";
+import { useState, useMemo } from "react";
+import { Card, Tabs, Spin, Alert, Empty } from "antd";
 import {
   LineChart,
   Line,
@@ -9,6 +9,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { useRevenue } from "../hooks/useRevenue";
 import "./IncomeChart.scss";
 
 type TimeRange = "day" | "month" | "year";
@@ -18,37 +19,9 @@ interface IIncomeData {
   income: number;
 }
 
-// Mock data - sẽ thay thế bằng API call sau
-const mockDayData: IIncomeData[] = Array.from({ length: 7 }, (_, i) => ({
-  date: `Ngày ${i + 1}`,
-  income: Math.floor(Math.random() * 1000000) + 500000,
-}));
-
-const mockMonthData: IIncomeData[] = Array.from({ length: 12 }, (_, i) => ({
-  date: `Tháng ${i + 1}`,
-  income: Math.floor(Math.random() * 5000000) + 2000000,
-}));
-
-const mockYearData: IIncomeData[] = Array.from({ length: 5 }, (_, i) => ({
-  date: `${2021 + i}`,
-  income: Math.floor(Math.random() * 50000000) + 20000000,
-}));
-
 function IncomeChart() {
-  const [timeRange, setTimeRange] = useState<TimeRange>("day");
-
-  const getData = (): IIncomeData[] => {
-    switch (timeRange) {
-      case "day":
-        return mockDayData;
-      case "month":
-        return mockMonthData;
-      case "year":
-        return mockYearData;
-      default:
-        return mockDayData;
-    }
-  };
+  const [timeRange, setTimeRange] = useState<TimeRange>("year");
+  const { revenue, isLoading, errorMessage } = useRevenue();
 
   const formatCurrency = (value: number): string => {
     return new Intl.NumberFormat("vi-VN", {
@@ -56,6 +29,37 @@ function IncomeChart() {
       currency: "VND",
     }).format(value);
   };
+
+  const getData = useMemo((): IIncomeData[] => {
+    if (!revenue) return [];
+
+    switch (timeRange) {
+      case "day":
+        // Hiển thị daily revenue nếu có dữ liệu
+        return [
+          {
+            date: "Hôm nay",
+            income: revenue.dailyRevenue,
+          },
+        ];
+      case "month":
+        // Hiển thị monthly revenue nếu có dữ liệu
+        return [
+          {
+            date: "Tháng này",
+            income: revenue.monthlyRevenue,
+          },
+        ];
+      case "year":
+        // Map revenueByPeriod để hiển thị theo năm
+        return revenue.revenueByPeriod.map((period) => ({
+          date: period.period,
+          income: period.revenue,
+        }));
+      default:
+        return [];
+    }
+  }, [revenue, timeRange]);
 
   const tabItems = [
     {
@@ -72,6 +76,35 @@ function IncomeChart() {
     },
   ];
 
+  if (isLoading) {
+    return (
+      <Card className="income-chart-card" bordered>
+        <div className="income-chart-loading">
+          <Spin size="large" />
+        </div>
+      </Card>
+    );
+  }
+
+  if (errorMessage) {
+    return (
+      <Card className="income-chart-card" bordered>
+        <Alert message="Lỗi" description={errorMessage} type="error" showIcon />
+      </Card>
+    );
+  }
+
+  if (!revenue || getData.length === 0) {
+    return (
+      <Card className="income-chart-card" bordered>
+        <div className="income-chart-header">
+          <h3 className="income-chart-title">Biểu đồ Income</h3>
+        </div>
+        <Empty description="Không có dữ liệu" />
+      </Card>
+    );
+  }
+
   return (
     <Card className="income-chart-card" bordered>
       <div className="income-chart-header">
@@ -85,7 +118,7 @@ function IncomeChart() {
       </div>
       <div className="income-chart-content">
         <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={getData()}>
+          <LineChart data={getData}>
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
             <XAxis dataKey="date" stroke="#6b7280" />
             <YAxis

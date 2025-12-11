@@ -10,6 +10,7 @@ import {
   Alert,
 } from "antd";
 import { Search, Plus, Filter } from "lucide-react";
+import { useNavigate } from "@tanstack/react-router";
 import BookTable from "../../components/BookTable";
 import "./BooksPage.scss";
 import { useDebounce, useDocumentTitle } from "@/hooks";
@@ -34,6 +35,7 @@ const DEFAULT_PAGE_SIZE = 10;
 
 function BooksPage() {
   useDocumentTitle("Danh sách Truyện tranh - CMS");
+  const navigate = useNavigate();
   const [keyword, setKeyword] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<string | undefined>();
   const [sortOption, setSortOption] = useState<BookSortOption | undefined>();
@@ -83,7 +85,7 @@ function BooksPage() {
   };
 
   const handleAddNew = () => {
-    console.log("Add new book");
+    navigate({ to: "/books/new" });
   };
 
   return (

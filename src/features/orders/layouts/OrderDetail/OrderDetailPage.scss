@@ -1,0 +1,106 @@
+@import "@/assets/variables.scss";
+
+.order-detail-page {
+  padding: $spacing-lg;
+  background-color: $white;
+
+  .order-detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $spacing-lg;
+    padding-bottom: $spacing-lg;
+    border-bottom: 1px solid $border-color;
+
+    .order-detail-title {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      font-weight: 600;
+      color: $text-primary;
+    }
+
+    .order-detail-subtitle {
+      margin-top: $spacing-xs;
+      font-family: "Poppins", sans-serif;
+      font-weight: 400;
+      color: $text-secondary;
+    }
+
+    .order-detail-back-button {
+      border-radius: $radius-md;
+      font-family: "Poppins", sans-serif;
+      font-weight: 500;
+      border: 1px solid $border-color;
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+    }
+  }
+
+  .order-detail-actions {
+    margin-bottom: $spacing-lg;
+    display: flex;
+    justify-content: flex-end;
+    gap: $spacing-sm;
+
+    .order-detail-action-button {
+      border-radius: $radius-md;
+      font-family: "Poppins", sans-serif;
+      font-weight: 500;
+      border: 1px solid $border-color;
+    }
+  }
+
+  .order-detail-error {
+    margin-bottom: $spacing-lg;
+    border-radius: $radius-sm;
+    font-family: "Poppins", sans-serif;
+  }
+
+  .order-detail-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 240px;
+  }
+
+  .order-detail-layout {
+    display: grid;
+    grid-template-columns: 2fr 1.4fr;
+    gap: $spacing-lg;
+    margin-bottom: $spacing-lg;
+
+    @media (max-width: $breakpoint-md) {
+      grid-template-columns: 1fr;
+    }
+
+    .order-detail-summary-card,
+    .order-detail-payment-card {
+      border-radius: $radius-lg;
+      border: 1px solid $border-color;
+    }
+  }
+
+  .order-detail-section-title {
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    margin-bottom: $spacing-md;
+  }
+
+  .order-detail-items-card {
+    border-radius: $radius-lg;
+    border: 1px solid $border-color;
+  }
+
+  .order-detail-empty {
+    border-radius: $radius-lg;
+    border: 1px solid $border-color;
+    text-align: center;
+    font-family: "Poppins", sans-serif;
+  }
+}
+
+
+
+
+

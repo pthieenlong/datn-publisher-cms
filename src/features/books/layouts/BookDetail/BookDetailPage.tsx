@@ -10,8 +10,6 @@ import {
   Statistic,
   Alert,
   Spin,
-  List,
-  Avatar,
   Form,
   Input,
   InputNumber,
@@ -47,7 +45,6 @@ function BookDetailPage() {
     book,
     isLoading,
     errorMessage,
-    reviews,
     currentChapters,
     chapterPage,
     chapterPageSize,
@@ -266,15 +263,6 @@ function BookDetailPage() {
           >
             Xóa
           </Button>
-          {/* <Button
-            type={book?.status === "PUBLISHED" ? "default" : "primary"}
-            icon={<Eye size={20} />}
-            onClick={handlePublish}
-            className="book-detail-action-button"
-            disabled={!book}
-          >
-            {book?.status === "PUBLISHED" ? "Ngừng xuất bản" : "Xuất bản"}
-          </Button> */}
         </Space>
       </div>
 
@@ -630,37 +618,6 @@ function BookDetailPage() {
                   </Space>
                 </div>
               </Form>
-            </Card>
-          </div>
-
-          <div className="book-detail-reviews">
-            <Card className="book-detail-reviews-card">
-              <Title level={4} className="book-detail-section-title">
-                Đánh giá từ độc giả
-              </Title>
-              <List
-                dataSource={reviews}
-                renderItem={(review) => (
-                  <List.Item key={review.id}>
-                    <List.Item.Meta
-                      avatar={
-                        <Avatar className="book-detail-review-avatar">
-                          {review.reviewer.charAt(0)}
-                        </Avatar>
-                      }
-                      title={
-                        <Space direction="vertical" size={0}>
-                          <Text strong>{review.reviewer}</Text>
-                          <Text type="secondary">
-                            {formatDate(review.createdAt)}
-                          </Text>
-                        </Space>
-                      }
-                      description={<Text>{review.content}</Text>}
-                    />
-                  </List.Item>
-                )}
-              />
             </Card>
           </div>
         </>

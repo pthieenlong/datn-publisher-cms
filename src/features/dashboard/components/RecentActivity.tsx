@@ -1,29 +1,22 @@
 import { Card, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
+import type { Order, OrderStatus } from "../../orders/types";
 import "./RecentActivity.scss";
 
-interface IOrder {
+interface RecentActivityProps {
+  orders: Order[];
+}
+
+interface IOrderTable {
   id: string;
   bookName: string;
   customerName: string;
   amount: number;
-  status: "completed" | "pending" | "cancelled";
+  status: OrderStatus;
   date: string;
 }
 
-// Mock data - sẽ thay thế bằng API call sau
-const mockOrders: IOrder[] = Array.from({ length: 10 }, (_, i) => ({
-  id: `ORD-${String(i + 1).padStart(4, "0")}`,
-  bookName: `Book ${i + 1}`,
-  customerName: `Customer ${i + 1}`,
-  amount: Math.floor(Math.random() * 500000) + 100000,
-  status: ["completed", "pending", "cancelled"][
-    Math.floor(Math.random() * 3)
-  ] as IOrder["status"],
-  date: new Date(Date.now() - i * 86400000).toLocaleDateString("vi-VN"),
-}));
-
-function RecentActivity() {
+function RecentActivity({ orders }: RecentActivityProps) {
   const formatCurrency = (value: number): string => {
     return new Intl.NumberFormat("vi-VN", {
       style: "currency",
@@ -31,28 +24,74 @@ function RecentActivity() {
     }).format(value);
   };
 
-  const getStatusColor = (status: IOrder["status"]): string => {
+  const formatDate = (dateString: string): string => {
+    return new Date(dateString).toLocaleDateString("vi-VN", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  const getStatusColor = (status: OrderStatus): string => {
     switch (status) {
-      case "completed":
+      case "PAID":
         return "#22c55e";
-      case "pending":
+      case "PENDING":
         return "#faad14";
-      case "cancelled":
+      case "CANCELLED":
+        return "#ef4444";
+      case "FAILED":
         return "#ef4444";
       default:
         return "#6b7280";
     }
   };
 
-  const columns: ColumnsType<IOrder> = [
+  const getStatusText = (status: OrderStatus): string => {
+    switch (status) {
+      case "PAID":
+        return "Đã thanh toán";
+      case "PENDING":
+        return "Đang xử lý";
+      case "CANCELLED":
+        return "Đã hủy";
+      case "FAILED":
+        return "Thất bại";
+      default:
+        return status;
+    }
+  };
+
+  const tableData: IOrderTable[] = orders.map((order) => ({
+    id: order.id,
+    bookName:
+      order.orderItems.length > 0
+        ? order.orderItems.length === 1
+          ? order.orderItems[0].bookTitle
+          : `${order.orderItems[0].bookTitle} và ${order.orderItems.length - 1} sách khác`
+        : "Không có sách",
+    customerName: order.userName || "Khách hàng",
+    amount: order.totalAmount,
+    status: order.status,
+    date: formatDate(order.createdAt),
+  }));
+
+  const columns: ColumnsType<IOrderTable> = [
     {
       title: "Mã đơn hàng",
       dataIndex: "id",
       key: "id",
-      width: 120,
+      width: 200,
+      render: (id: string) => (
+        <span style={{ fontFamily: "monospace", fontSize: "12px" }}>
+          {id.substring(0, 8)}...
+        </span>
+      ),
     },
     {
-      title: "Tên sách",
+      title: "Sách",
       dataIndex: "bookName",
       key: "bookName",
     },
@@ -72,25 +111,20 @@ function RecentActivity() {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
-      render: (status: IOrder["status"]) => {
-        const statusText = {
-          completed: "Hoàn thành",
-          pending: "Đang xử lý",
-          cancelled: "Đã hủy",
-        };
+      render: (status: OrderStatus) => {
         return (
           <span style={{ color: getStatusColor(status) }}>
-            {statusText[status]}
+            {getStatusText(status)}
           </span>
         );
       },
       width: 120,
     },
     {
-      title: "Ngày",
+      title: "Ngày tạo",
       dataIndex: "date",
       key: "date",
-      width: 120,
+      width: 160,
     },
   ];
 
@@ -99,7 +133,7 @@ function RecentActivity() {
       <h3 className="recent-activity-title">Đơn hàng gần đây</h3>
       <Table
         columns={columns}
-        dataSource={mockOrders}
+        dataSource={tableData}
         rowKey="id"
         pagination={{ pageSize: 5 }}
         className="recent-activity-table"

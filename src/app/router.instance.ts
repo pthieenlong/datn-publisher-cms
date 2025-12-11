@@ -8,10 +8,11 @@ import { DashboardPage } from "@/features/dashboard";
 import {
   BooksPage,
   BookDetailPage,
+  BookCreatePage,
   ChapterDetailPage,
   ChapterEditPage,
 } from "@/features/books";
-import { OrdersPage } from "@/features/orders";
+import { OrdersPage, OrderDetailPage } from "@/features/orders";
 import { LoginPage } from "@/features/auth";
 import AppLayout from "./app";
 const rootRoute = createRootRoute({
@@ -35,6 +36,11 @@ const booksRoute = createRoute({
   path: "/books",
   component: BooksPage,
 });
+const bookCreateRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/books/new",
+  component: BookCreatePage,
+});
 const bookDetailRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/books/$slug",
@@ -55,14 +61,21 @@ const ordersRoute = createRoute({
   path: "/orders",
   component: OrdersPage,
 });
+const orderDetailRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/orders/$orderId",
+  component: OrderDetailPage,
+});
 rootRoute.addChildren([
   loginRoute,
   indexRoute,
   booksRoute,
+  bookCreateRoute,
   bookDetailRoute,
   chapterDetailRoute,
   chapterEditRoute,
   ordersRoute,
+  orderDetailRoute,
 ]);
 
 export const router = createRouter({

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Typography, Alert } from "antd";
+import { useNavigate } from "@tanstack/react-router";
 import OrderTable from "@/features/orders/components/OrderTable";
 import "./OrdersPage.scss";
 import { useDocumentTitle } from "@/hooks";
@@ -12,6 +13,7 @@ const DEFAULT_PAGE_SIZE = 10;
 
 function OrdersPage() {
   useDocumentTitle("Danh sách Đơn hàng - CMS");
+  const navigate = useNavigate();
   const [page, setPage] = useState(DEFAULT_PAGE);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
 
@@ -20,6 +22,13 @@ function OrdersPage() {
   const handlePaginationChange = (nextPage: number, nextPageSize: number) => {
     setPage(nextPage);
     setPageSize(nextPageSize);
+  };
+
+  const handleViewDetail = (id: string) => {
+    navigate({
+      to: "/orders/$orderId",
+      params: { orderId: id },
+    });
   };
 
   return (
@@ -54,6 +63,7 @@ function OrdersPage() {
           page={page}
           pageSize={pageSize}
           onPaginationChange={handlePaginationChange}
+          onViewDetail={handleViewDetail}
         />
       </div>
     </div>

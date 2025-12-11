@@ -6,6 +6,8 @@ import type {
   ChapterDetailResponse,
   FetchBooksPayload,
   UpdateBookPayload,
+  CreateBookPayload,
+  CreateBookResponse,
 } from "../types";
 
 export async function fetchBooks(
@@ -57,6 +59,31 @@ export async function updateBookDetail(
 ): Promise<BookDetailResponse> {
   const endpoint = `/cms/publisher/books/${encodeURIComponent(slug)}`;
   const response = await axiosInstance.put(endpoint, payload);
+
+  return response.data;
+}
+
+export async function createBook(
+  payload: CreateBookPayload
+): Promise<CreateBookResponse> {
+  const formData = new FormData();
+  formData.append("title", payload.title);
+  formData.append("author", payload.author);
+  formData.append("price", payload.price.toString());
+  
+  if (payload.thumbnail) {
+    formData.append("thumbnail", payload.thumbnail);
+  }
+
+  const response = await axiosInstance.post<CreateBookResponse>(
+    `/cms/publisher/books`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
 
   return response.data;
 }

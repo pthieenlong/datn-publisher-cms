@@ -1,0 +1,115 @@
+@import "@/assets/variables.scss";
+
+.book-create-page {
+  padding: $spacing-lg;
+  background-color: $white;
+
+  .book-create-header {
+    margin-bottom: $spacing-lg;
+    padding-bottom: $spacing-lg;
+    border-bottom: 1px solid $border-color;
+
+    .book-create-back-button {
+      border-radius: $radius-md;
+      font-family: "Poppins", sans-serif;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+      border: 1px solid $border-color;
+    }
+
+    .book-create-title {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      font-weight: 600;
+      color: $text-primary;
+      font-size: 24px;
+    }
+  }
+
+  .book-create-form-card {
+    border: 1px solid $border-color;
+    border-radius: $radius-lg;
+
+    .book-create-form-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: $spacing-xl;
+
+      @media (max-width: $breakpoint-md) {
+        grid-template-columns: 1fr;
+      }
+
+      .book-create-form-left,
+      .book-create-form-right {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-lg;
+      }
+    }
+
+    .book-create-input,
+    .book-create-select,
+    .book-create-input-number {
+      border-radius: $radius-sm;
+      font-family: "Poppins", sans-serif;
+      font-weight: 400;
+    }
+
+    .book-create-upload {
+      .ant-upload-select-picture-card {
+        border-radius: $radius-sm;
+        border: 1px solid $border-color;
+      }
+
+      .ant-upload-list-picture-card {
+        .ant-upload-list-item {
+          border-radius: $radius-sm;
+          border: 1px solid $border-color;
+        }
+      }
+    }
+
+    .book-create-cover-preview {
+      margin-top: $spacing-md;
+      text-align: center;
+
+      .book-create-cover-image {
+        width: 100%;
+        max-width: 300px;
+        height: auto;
+        border-radius: $radius-lg;
+        border: 1px solid $border-color;
+        object-fit: cover;
+      }
+    }
+
+    .ant-form-item-label > label {
+      font-family: "Poppins", sans-serif;
+      font-weight: 500;
+      color: $text-primary;
+    }
+
+    .book-create-actions {
+      margin-top: $spacing-xl;
+      padding-top: $spacing-lg;
+      border-top: 1px solid $border-color;
+      display: flex;
+      justify-content: flex-end;
+
+      .book-create-action-button {
+        border-radius: $radius-md;
+        font-family: "Poppins", sans-serif;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: $spacing-sm;
+        height: auto;
+        padding: $spacing-sm $spacing-lg;
+      }
+    }
+  }
+}
+
+

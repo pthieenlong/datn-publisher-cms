@@ -156,3 +156,17 @@ export interface UpdateBookPayload {
   isFree?: boolean;
   description?: string;
 }
+
+export interface CreateBookPayload {
+  title: string;
+  author: string;
+  price: number;
+  thumbnail?: File;
+}
+
+export interface CreateBookResponse {
+  httpCode: number;
+  success: boolean;
+  message: string;
+  data: BookDetail;
+}

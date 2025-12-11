@@ -31,4 +31,11 @@
   .income-chart-content {
     margin-top: $spacing-lg;
   }
+
+  .income-chart-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+  }
 }

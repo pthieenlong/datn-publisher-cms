@@ -11,6 +11,7 @@ interface OrderTableProps {
   page: number;
   pageSize: number;
   onPaginationChange: (page: number, pageSize: number) => void;
+  onViewDetail: (id: string) => void;
 }
 
 function OrderTable({
@@ -20,6 +21,7 @@ function OrderTable({
   page,
   pageSize,
   onPaginationChange,
+  onViewDetail,
 }: OrderTableProps) {
   const formatCurrency = (value: number): string => {
     return new Intl.NumberFormat("vi-VN", {
@@ -81,10 +83,6 @@ function OrderTable({
       default:
         return method;
     }
-  };
-
-  const handleViewDetail = (id: string) => {
-    console.log("View order detail:", id);
   };
 
   const columns: ColumnsType<Order> = [
@@ -196,7 +194,7 @@ function OrderTable({
         <Button
           type="link"
           icon={<Eye size={20} />}
-          onClick={() => handleViewDetail(record.id)}
+          onClick={() => onViewDetail(record.id)}
           className="order-action-button"
         >
           Xem chi tiết

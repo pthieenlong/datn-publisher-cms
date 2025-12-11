@@ -21,6 +21,41 @@ export interface Order {
   orderItems: OrderItem[];
 }
 
+export interface OrderDetailBook {
+  id: string;
+  title: string;
+  slug: string;
+  thumbnail: string;
+  author: string;
+}
+
+export interface OrderDetailItem {
+  id: string;
+  bookId: string;
+  defaultPrice: number;
+  discountPrice: number;
+  book: OrderDetailBook;
+}
+
+export interface OrderDetailUser {
+  id: string;
+  username: string;
+  email: string;
+}
+
+export interface OrderDetail {
+  id: string;
+  orderCode: string;
+  userId: string;
+  totalAmount: number;
+  status: OrderStatus;
+  payingMethod: PayingMethod;
+  createdAt: string;
+  updatedAt: string;
+  orderItems: OrderDetailItem[];
+  user: OrderDetailUser;
+}
+
 export interface PaginationMeta {
   page: number;
   limit: number;
@@ -38,6 +73,13 @@ export interface OrdersResponse {
   success: boolean;
   message: string;
   data: OrdersData;
+}
+
+export interface OrderDetailResponse {
+  httpCode: number;
+  success: boolean;
+  message: string;
+  data: OrderDetail;
 }
 
 export type OrderSortOption =
