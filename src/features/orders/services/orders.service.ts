@@ -1,9 +1,20 @@
 import axiosInstance from "@/lib/axios";
-import type { OrdersResponse, OrderDetailResponse } from "../types";
+import type {
+  FetchOrdersPayload,
+  OrdersResponse,
+  OrderDetailResponse,
+} from "../types";
 
-export async function fetchOrders(): Promise<OrdersResponse> {
+export async function fetchOrders(
+  payload?: FetchOrdersPayload
+): Promise<OrdersResponse> {
+  const { filters, signal } = payload ?? {};
   const response = await axiosInstance.get<OrdersResponse>(
-    `/cms/publisher/orders`
+    `/cms/publisher/orders`,
+    {
+      params: filters,
+      signal,
+    }
   );
   return response.data;
 }

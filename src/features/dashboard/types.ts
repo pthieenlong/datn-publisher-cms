@@ -41,4 +41,3 @@ export interface RevenueResponse {
   message: string;
   data: RevenueData;
 }
-

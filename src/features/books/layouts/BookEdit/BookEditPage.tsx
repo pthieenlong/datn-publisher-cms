@@ -302,13 +302,15 @@ function BookEditPage() {
                     { type: "number", min: 0, message: "Giá phải lớn hơn 0" },
                   ]}
                 >
-                  <InputNumber
+                  <InputNumber<number>
                     className="book-edit-input-number"
                     placeholder="Nhập giá bán..."
                     formatter={(value) =>
                       `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                     }
-                    parser={(value) => value!.replace(/\$\s?|(,*)/g, "")}
+                    parser={(value) =>
+                      Number((value ?? "0").replace(/\$\s?|(,*)/g, "")) || 0
+                    }
                     style={{ width: "100%" }}
                   />
                 </Form.Item>
@@ -319,13 +321,15 @@ function BookEditPage() {
                     { type: "number", min: 0, max: 100, message: "Từ 0-100%" },
                   ]}
                 >
-                  <InputNumber
+                  <InputNumber<number>
                     className="book-edit-input-number"
                     placeholder="Nhập % giảm giá..."
                     min={0}
                     max={100}
                     formatter={(value) => `${value}%`}
-                    parser={(value) => value!.replace("%", "")}
+                    parser={(value) =>
+                      Number((value ?? "0").replace("%", "")) || 0
+                    }
                     style={{ width: "100%" }}
                   />
                 </Form.Item>

@@ -9,6 +9,7 @@ import {
   BooksPage,
   BookDetailPage,
   BookCreatePage,
+  BookEditPage,
   ChapterDetailPage,
   ChapterEditPage,
 } from "@/features/books";
@@ -46,6 +47,11 @@ const bookDetailRoute = createRoute({
   path: "/books/$slug",
   component: BookDetailPage,
 });
+const bookEditRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/books/$slug/edit",
+  component: BookEditPage,
+});
 const chapterDetailRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/books/$bookSlug/chapters/$chapterSlug",
@@ -66,12 +72,13 @@ const orderDetailRoute = createRoute({
   path: "/orders/$orderId",
   component: OrderDetailPage,
 });
-rootRoute.addChildren([
+const routeTree = rootRoute.addChildren([
   loginRoute,
   indexRoute,
   booksRoute,
   bookCreateRoute,
   bookDetailRoute,
+  bookEditRoute,
   chapterDetailRoute,
   chapterEditRoute,
   ordersRoute,
@@ -79,7 +86,7 @@ rootRoute.addChildren([
 ]);
 
 export const router = createRouter({
-  routeTree: rootRoute,
+  routeTree,
 });
 
 declare module "@tanstack/react-router" {

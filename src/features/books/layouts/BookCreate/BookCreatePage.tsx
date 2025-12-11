@@ -143,16 +143,22 @@ function BookCreatePage() {
                 name="price"
                 rules={[
                   { required: true, message: "Vui lòng nhập giá bán" },
-                  { type: "number", min: 0, message: "Giá phải lớn hơn hoặc bằng 0" },
+                  {
+                    type: "number",
+                    min: 0,
+                    message: "Giá phải lớn hơn hoặc bằng 0",
+                  },
                 ]}
               >
-                <InputNumber
+                <InputNumber<number>
                   className="book-create-input-number"
                   placeholder="Nhập giá bán..."
                   formatter={(value) =>
-                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    `${value ?? ""}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                   }
-                  parser={(value) => value!.replace(/\$\s?|(,*)/g, "")}
+                  parser={(value) =>
+                    Number((value ?? "0").replace(/\$\s?|(,*)/g, "")) || 0
+                  }
                   style={{ width: "100%" }}
                   min={0}
                 />
@@ -222,5 +228,3 @@ function BookCreatePage() {
 }
 
 export default BookCreatePage;
-
-

@@ -14,9 +14,7 @@ interface UseRevenueReturn {
   refetch: () => Promise<void>;
 }
 
-export function useRevenue(
-  options: UseRevenueOptions = {}
-): UseRevenueReturn {
+export function useRevenue(options: UseRevenueOptions = {}): UseRevenueReturn {
   const { enabled = true } = options;
   const [revenue, setRevenue] = useState<RevenueData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -70,5 +68,3 @@ export function useRevenue(
     refetch,
   };
 }
-
-

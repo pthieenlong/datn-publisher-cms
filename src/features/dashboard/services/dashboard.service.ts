@@ -20,4 +20,3 @@ export async function fetchRevenue(
   );
   return response.data;
 }
-

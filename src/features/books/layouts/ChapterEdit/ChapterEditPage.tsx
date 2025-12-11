@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import type { UploadFile } from "antd/es/upload/interface";
+import type { UploadChangeParam, UploadFile } from "antd/es/upload/interface";
 import "./ChapterEditPage.scss";
 import { useDocumentTitle } from "@/hooks";
 import { useChapterDetail } from "../../hooks/useChapterDetail";
@@ -103,11 +103,14 @@ function ChapterEditPage() {
     }
   };
 
-  const handleUploadChange = (info: any) => {
-    const mappedList: ImageItem[] = info.fileList.map((file) => ({
-      ...file,
-      isExisting: file.isExisting,
-    }));
+  const handleUploadChange = (info: UploadChangeParam<UploadFile>) => {
+    const mappedList: ImageItem[] = info.fileList.map((file) => {
+      const currentFile = file as ImageItem;
+      return {
+        ...currentFile,
+        isExisting: currentFile.isExisting,
+      };
+    });
     setFileList(mappedList);
   };
 

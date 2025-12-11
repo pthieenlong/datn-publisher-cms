@@ -17,7 +17,7 @@ function OrdersPage() {
   const [page, setPage] = useState(DEFAULT_PAGE);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
 
-  const { orders, pagination, isLoading, errorMessage, refetch } = useOrders();
+  const { orders, pagination, isLoading, errorMessage } = useOrders();
 
   const handlePaginationChange = (nextPage: number, nextPageSize: number) => {
     setPage(nextPage);

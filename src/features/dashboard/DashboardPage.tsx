@@ -33,12 +33,7 @@ function DashboardPage() {
   if (errorMessage) {
     return (
       <div className="dashboard-page">
-        <Alert
-          message="Lỗi"
-          description={errorMessage}
-          type="error"
-          showIcon
-        />
+        <Alert message="Lỗi" description={errorMessage} type="error" showIcon />
       </div>
     );
   }

@@ -31,16 +31,13 @@ export function useOrders(options: UseOrdersOptions = {}): UseOrdersReturn {
       setIsLoading(true);
       setErrorMessage(null);
       try {
-        const result = (await fetchOrders()).data;
-        // Đảm bảo data luôn là array
-
-        console.log(result);
-        const ordersData = Array.isArray(result.data?.orders)
-          ? result.data.orders
+        const response = await fetchOrders({ signal });
+        const ordersData = Array.isArray(response.data?.orders)
+          ? response.data.orders
           : [];
         setOrders(ordersData);
-        setPagination(result.data?.pagination || null);
-        setMessage(result.message || "");
+        setPagination(response.data?.pagination || null);
+        setMessage(response.message || "");
       } catch (error) {
         if ((error as Error)?.name === "CanceledError") {
           return;

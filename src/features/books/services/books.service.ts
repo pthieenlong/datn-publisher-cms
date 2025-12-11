@@ -70,7 +70,7 @@ export async function createBook(
   formData.append("title", payload.title);
   formData.append("author", payload.author);
   formData.append("price", payload.price.toString());
-  
+
   if (payload.thumbnail) {
     formData.append("thumbnail", payload.thumbnail);
   }

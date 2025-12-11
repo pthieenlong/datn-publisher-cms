@@ -70,7 +70,9 @@ function RecentActivity({ orders }: RecentActivityProps) {
       order.orderItems.length > 0
         ? order.orderItems.length === 1
           ? order.orderItems[0].bookTitle
-          : `${order.orderItems[0].bookTitle} và ${order.orderItems.length - 1} sách khác`
+          : `${order.orderItems[0].bookTitle} và ${
+              order.orderItems.length - 1
+            } sách khác`
         : "Không có sách",
     customerName: order.userName || "Khách hàng",
     amount: order.totalAmount,

@@ -549,12 +549,14 @@ function BookDetailPage() {
                         },
                       ]}
                     >
-                      <InputNumber
+                      <InputNumber<number>
                         style={{ width: "100%" }}
                         formatter={(value) =>
                           `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         }
-                        parser={(value) => value!.replace(/\$\s?|(,*)/g, "")}
+                        parser={(value) =>
+                          Number((value ?? "0").replace(/\$\s?|(,*)/g, "")) || 0
+                        }
                         placeholder="VD: 30.000"
                       />
                     </Form.Item>
@@ -572,12 +574,14 @@ function BookDetailPage() {
                         },
                       ]}
                     >
-                      <InputNumber
+                      <InputNumber<number>
                         style={{ width: "100%" }}
                         min={0}
                         max={100}
                         formatter={(value) => `${value}%`}
-                        parser={(value) => value!.replace("%", "")}
+                        parser={(value) =>
+                          Number((value ?? "0").replace("%", "")) || 0
+                        }
                         placeholder="VD: 20%"
                       />
                     </Form.Item>
