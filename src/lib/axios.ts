@@ -2,7 +2,14 @@
 import axios, { AxiosError } from "axios";
 
 // Sử dụng proxy trong development để tránh vấn đề SameSite cookie
-const API_URL = import.meta.env.DEV ? "/api" : "http://157.66.101.220:3000";
+// In development, use /api which will be proxied by Vite
+// In production, use the full API URL
+const API_URL =  "http://180.93.42.9:3000";
+
+if (import.meta.env.DEV) {
+  console.log("🔧 [Axios] Using proxy path:", API_URL);
+  console.log("🔧 [Axios] Make sure Vite dev server is running on port 5173");
+}
 
 const axiosInstance = axios.create({
   baseURL: API_URL,
@@ -18,6 +25,11 @@ axiosInstance.interceptors.request.use(
   (config) => {
     if (config.data instanceof FormData) {
       delete config.headers["Content-Type"];
+    }
+    if (import.meta.env.DEV) {
+      console.log(
+        `📤 [Client] Request: ${config.method?.toUpperCase()} ${config.url}`
+      );
     }
     return config;
   },
@@ -60,6 +72,10 @@ axiosInstance.interceptors.response.use(
 
     if (!error.response) {
       console.error("❌ Network Error:", error.message);
+    } else {
+      console.error(
+        `❌ [Client] API Error: ${error.response.status} ${error.response.statusText} → ${error.message}`
+      );
     }
     return Promise.reject(error);
   }
