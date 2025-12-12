@@ -24,8 +24,15 @@ jobs:
           port: ${{ secrets.VPS_PORT || 22 }}
           command_timeout: 45m
           timeout: 45m
+          script_stop: true
           script: |
             set -e
+            
+            # Check VPS load before deploying
+            echo "🔍 Checking VPS system load..."
+            LOAD=$(uptime | awk -F'load average:' '{print $2}' | awk '{print $1}' | sed 's/,//')
+            echo "📊 Current load: $LOAD"
+            
             echo "🔍 Checking deployment directory..."
             if [ ! -d "/opt/datn-publisher-cms" ]; then
               echo "❌ Directory /opt/datn-publisher-cms not found!"
