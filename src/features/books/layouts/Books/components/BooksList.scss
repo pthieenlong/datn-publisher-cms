@@ -1,0 +1,97 @@
+.books-list {
+  background: #fff;
+  border-radius: 8px;
+  padding: 16px;
+
+  &__error-alert {
+    margin-bottom: 16px;
+  }
+
+  &__table {
+    .ant-table-thead > tr > th {
+      background: #fafafa;
+    }
+  }
+
+  &__info-cell {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  &__cover-image {
+    width: 60px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  &__info-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__title {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0;
+    cursor: pointer;
+    color: #1890ff;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 12px;
+    color: #6b7280;
+  }
+
+  &__categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  &__category-empty {
+    color: #9ca3af;
+    font-style: italic;
+  }
+
+  &__pricing {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__price-item {
+    display: flex;
+    gap: 8px;
+    font-size: 13px;
+  }
+
+  &__price-label {
+    color: #6b7280;
+  }
+
+  &__sale-price {
+    font-weight: 600;
+    color: #1890ff;
+  }
+
+  &__sale-percent {
+    color: #ef4444;
+  }
+
+  &__action-button {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+}

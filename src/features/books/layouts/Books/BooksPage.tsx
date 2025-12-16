@@ -1,41 +1,20 @@
 import { useMemo, useState } from "react";
-import {
-  Row,
-  Col,
-  Typography,
-  Input,
-  Button,
-  Select,
-  Space,
-  Alert,
-} from "antd";
-import { Search, Plus, Filter } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
-import BookTable from "../../components/BookTable";
-import "./BooksPage.scss";
 import { useDebounce, useDocumentTitle } from "@/hooks";
 import { useBooks } from "../../hooks/useBooks";
+import { useCategories } from "@/features/categories";
+import { BooksHeader, BooksFilterBar, BooksList } from "./components";
 import type { BookSortOption } from "../../types";
-import { useCategories } from "../../../categories";
-
-const { Title, Text } = Typography;
-const { Search: SearchInput } = Input;
-
-const SORT_OPTIONS: { value: BookSortOption; label: string }[] = [
-  { value: "latest", label: "Mới nhất" },
-  { value: "top_rated", label: "Đánh giá cao" },
-  { value: "most_viewed", label: "Xem nhiều" },
-  { value: "price_asc", label: "Giá tăng dần" },
-  { value: "price_desc", label: "Giá giảm dần" },
-  { value: "free", label: "Miễn phí" },
-];
+import "./BooksPage.scss";
 
 const DEFAULT_PAGE = 1;
 const DEFAULT_PAGE_SIZE = 10;
 
-function BooksPage() {
+export default function BooksPage() {
   useDocumentTitle("Danh sách Truyện tranh - CMS");
   const navigate = useNavigate();
+
+  // Filter states
   const [keyword, setKeyword] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<string | undefined>();
   const [sortOption, setSortOption] = useState<BookSortOption | undefined>();
@@ -44,6 +23,7 @@ function BooksPage() {
 
   const debouncedKeyword = useDebounce(keyword, 500);
 
+  // Build filters
   const filters = useMemo(
     () => ({
       page,
@@ -55,6 +35,7 @@ function BooksPage() {
     [page, pageSize, debouncedKeyword, categoryFilter, sortOption]
   );
 
+  // Data fetching
   const { books, pagination, isLoading, errorMessage, refetch } = useBooks({
     filters,
   });
@@ -64,6 +45,7 @@ function BooksPage() {
     errorMessage: categoryError,
   } = useCategories();
 
+  // Event handlers
   const handleSearch = (value: string) => {
     setKeyword(value);
     setPage(DEFAULT_PAGE);
@@ -88,118 +70,38 @@ function BooksPage() {
     navigate({ to: "/books/new" });
   };
 
+  const handleViewDetail = (slug: string) => {
+    navigate({ to: `/books/${slug}` });
+  };
+
   return (
     <div className="books-page">
-      {/* Page Header */}
-      <div className="books-header">
-        <div className="books-header-content">
-          <Title level={2} className="books-title">
-            Danh sách Truyện tranh
-          </Title>
-          <Text className="books-description">
-            Quản lý và theo dõi tất cả truyện tranh trong hệ thống
-          </Text>
-        </div>
-        <Button
-          type="primary"
-          icon={<Plus size={20} />}
-          onClick={handleAddNew}
-          className="books-add-button"
-        >
-          Thêm mới
-        </Button>
-      </div>
+      <BooksHeader onAddNew={handleAddNew} />
 
-      {/* Toolbar */}
-      <div className="books-toolbar">
-        <Row gutter={[12, 12]}>
-          <Col xs={24} sm={12} md={8} lg={6}>
-            <SearchInput
-              placeholder="Tìm kiếm truyện tranh..."
-              allowClear
-              onSearch={handleSearch}
-              value={keyword}
-              onChange={(event) => setKeyword(event.target.value)}
-              prefix={<Search size={20} />}
-              className="books-search-input"
-            />
-          </Col>
-          <Col xs={24} sm={12} md={8} lg={6}>
-            <Select
-              placeholder="Sắp xếp"
-              allowClear
-              className="books-filter-select"
-              style={{ width: "100%" }}
-              value={sortOption}
-              onChange={(value) =>
-                handleSortChange(value as BookSortOption | undefined)
-              }
-            >
-              {SORT_OPTIONS.map((option) => (
-                <Select.Option key={option.value} value={option.value}>
-                  {option.label}
-                </Select.Option>
-              ))}
-            </Select>
-          </Col>
-          <Col xs={24} sm={12} md={8} lg={6}>
-            <Select
-              placeholder="Thể loại"
-              allowClear
-              className="books-filter-select"
-              style={{ width: "100%" }}
-              value={categoryFilter}
-              onChange={(value) =>
-                handleCategoryChange(value as string | undefined)
-              }
-              loading={isCategoryLoading}
-              notFoundContent={
-                categoryError ? "Không thể tải thể loại" : undefined
-              }
-            >
-              {categories.map((category) => (
-                <Select.Option key={category.id} value={category.slug}>
-                  {category.title}
-                </Select.Option>
-              ))}
-            </Select>
-          </Col>
-          <Col xs={24} sm={12} md={8} lg={6}>
-            <Space>
-              <Button
-                icon={<Filter size={20} />}
-                className="books-filter-button"
-                onClick={() => refetch()}
-              >
-                Lọc
-              </Button>
-            </Space>
-          </Col>
-        </Row>
-      </div>
+      <BooksFilterBar
+        keyword={keyword}
+        sortOption={sortOption}
+        categoryFilter={categoryFilter}
+        categories={categories}
+        isCategoryLoading={isCategoryLoading}
+        categoryError={categoryError}
+        onKeywordChange={setKeyword}
+        onSearch={handleSearch}
+        onSortChange={handleSortChange}
+        onCategoryChange={handleCategoryChange}
+        onRefetch={refetch}
+      />
 
-      {/* Book Table */}
-      <div className="books-table-container">
-        {errorMessage && (
-          <Alert
-            type="error"
-            message="Không thể tải danh sách truyện"
-            description={errorMessage}
-            showIcon
-            className="books-error-alert"
-          />
-        )}
-        <BookTable
-          data={books}
-          loading={isLoading}
-          pagination={pagination}
-          page={page}
-          pageSize={pageSize}
-          onPaginationChange={handlePaginationChange}
-        />
-      </div>
+      <BooksList
+        books={books}
+        isLoading={isLoading}
+        errorMessage={errorMessage}
+        pagination={pagination}
+        page={page}
+        pageSize={pageSize}
+        onPaginationChange={handlePaginationChange}
+        onViewDetail={handleViewDetail}
+      />
     </div>
   );
 }
-
-export default BooksPage;

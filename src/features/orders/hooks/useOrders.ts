@@ -32,11 +32,12 @@ export function useOrders(options: UseOrdersOptions = {}): UseOrdersReturn {
       setErrorMessage(null);
       try {
         const response = await fetchOrders({ signal });
-        const ordersData = Array.isArray(response.data?.orders)
-          ? response.data.orders
+        console.log(response);
+        const ordersData = Array.isArray(response.data?.data?.orders)
+          ? response.data.data.orders
           : [];
         setOrders(ordersData);
-        setPagination(response.data?.pagination || null);
+        setPagination(response.data?.data?.pagination || null);
         setMessage(response.message || "");
       } catch (error) {
         if ((error as Error)?.name === "CanceledError") {
@@ -47,7 +48,6 @@ export function useOrders(options: UseOrdersOptions = {}): UseOrdersReturn {
             ? error.message
             : "Không thể tải danh sách đơn hàng"
         );
-        // Đảm bảo orders là array rỗng khi có lỗi
         setOrders([]);
       } finally {
         setIsLoading(false);

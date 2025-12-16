@@ -1,0 +1,26 @@
+.book-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+
+  &__back-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__title {
+    margin: 0 !important;
+  }
+
+  &__actions {
+    margin-bottom: 24px;
+  }
+
+  &__action-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}

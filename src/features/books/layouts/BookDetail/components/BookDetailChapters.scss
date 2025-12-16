@@ -1,0 +1,13 @@
+.book-detail-chapters {
+  height: 100%;
+
+  &__title {
+    margin-bottom: 16px !important;
+  }
+
+  &__pagination {
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+  }
+}

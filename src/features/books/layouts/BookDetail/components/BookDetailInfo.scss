@@ -1,0 +1,63 @@
+.book-detail-info {
+  margin-bottom: 24px;
+
+  &__card {
+    padding: 8px;
+  }
+
+  &__cover {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__cover-image {
+    width: 100%;
+    max-width: 250px;
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__title {
+    margin: 0 !important;
+  }
+
+  &__slug {
+    color: #6b7280;
+    font-size: 14px;
+  }
+
+  &__description {
+    margin: 8px 0;
+    padding: 12px;
+    background: #f9fafb;
+    border-radius: 8px;
+  }
+
+  &__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__meta-item {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+
+    > span:first-child {
+      min-width: 100px;
+    }
+  }
+
+  &__category-tag {
+    margin: 0;
+  }
+}

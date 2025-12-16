@@ -1,8 +1,8 @@
 import { useState, useMemo } from "react";
 import { Card, Tabs, Spin, Alert, Empty } from "antd";
 import {
-  LineChart,
-  Line,
+  BarChart,
+  Bar,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -33,9 +33,17 @@ function IncomeChart() {
   const getData = useMemo((): IIncomeData[] => {
     if (!revenue) return [];
 
+    // Sử dụng revenueByPeriod cho tất cả các tab
+    if (revenue.revenueByPeriod && revenue.revenueByPeriod.length > 0) {
+      return revenue.revenueByPeriod.map((period) => ({
+        date: period.period,
+        income: period.revenue,
+      }));
+    }
+
+    // Fallback nếu không có revenueByPeriod
     switch (timeRange) {
       case "day":
-        // Hiển thị daily revenue nếu có dữ liệu
         return [
           {
             date: "Hôm nay",
@@ -43,7 +51,6 @@ function IncomeChart() {
           },
         ];
       case "month":
-        // Hiển thị monthly revenue nếu có dữ liệu
         return [
           {
             date: "Tháng này",
@@ -51,11 +58,7 @@ function IncomeChart() {
           },
         ];
       case "year":
-        // Map revenueByPeriod để hiển thị theo năm
-        return revenue.revenueByPeriod.map((period) => ({
-          date: period.period,
-          income: period.revenue,
-        }));
+        return [];
       default:
         return [];
     }
@@ -118,7 +121,7 @@ function IncomeChart() {
       </div>
       <div className="income-chart-content">
         <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={getData}>
+          <BarChart data={getData}>
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
             <XAxis dataKey="date" stroke="#6b7280" />
             <YAxis
@@ -133,14 +136,12 @@ function IncomeChart() {
                 borderRadius: "8px",
               }}
             />
-            <Line
-              type="monotone"
+            <Bar
               dataKey="income"
-              stroke="#3b82f6"
-              strokeWidth={2}
-              dot={{ fill: "#3b82f6", r: 4 }}
+              fill="#3b82f6"
+              radius={[8, 8, 0, 0]}
             />
-          </LineChart>
+          </BarChart>
         </ResponsiveContainer>
       </div>
     </Card>

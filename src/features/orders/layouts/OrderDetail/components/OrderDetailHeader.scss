@@ -1,0 +1,26 @@
+.order-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+
+  &__back-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__title {
+    margin: 0 !important;
+  }
+
+  &__subtitle {
+    color: #6b7280;
+  }
+
+  &__action-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}

@@ -1,4 +1,6 @@
-export type BookStatus = "DRAFT" | "PUBLISHED" | "ARCHIVED";
+export type BookStatus = "PENDING" | "DRAFT" | "PUBLISHED" | "REJECTED" | "ARCHIVED";
+
+export type ChapterStatus = "PENDING" | "DRAFT" | "PUBLISHED" | "ARCHIVED";
 
 export interface BookCategory {
   category: {
@@ -68,7 +70,7 @@ export interface BookChapter {
   slug: string;
   chapterNumber: number;
   views: number;
-  status: BookStatus;
+  status: ChapterStatus;
   publishedAt: string;
   createdAt: string;
   updatedAt: string;

@@ -1,6 +1,6 @@
-export type OrderStatus = "PAID" | "PENDING" | "CANCELLED" | "FAILED";
+export type OrderStatus = "PAID" | "PENDING" | "CANCELLED" | "REFUNDED" | "ERROR";
 
-export type PayingMethod = "BANKING" | "VNPAY" | "MOMO" | "CASH";
+export type PayingMethod = "BANKING" | "MOMO" | "VNPAY";
 
 export interface OrderItem {
   id: string;
@@ -34,6 +34,7 @@ export interface OrderDetailItem {
   bookId: string;
   defaultPrice: number;
   discountPrice: number;
+  finalPrice: number;
   book: OrderDetailBook;
 }
 
@@ -48,8 +49,10 @@ export interface OrderDetail {
   orderCode: string;
   userId: string;
   totalAmount: number;
+  publisherRevenue: number;
   status: OrderStatus;
   payingMethod: PayingMethod;
+  paidAt: string | null;
   createdAt: string;
   updatedAt: string;
   orderItems: OrderDetailItem[];
@@ -72,7 +75,9 @@ export interface OrdersResponse {
   httpCode: number;
   success: boolean;
   message: string;
-  data: OrdersData;
+  data: {
+    data: OrdersData;
+  };
 }
 
 export interface OrderDetailResponse {

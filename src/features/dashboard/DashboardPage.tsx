@@ -1,15 +1,15 @@
-import { Row, Col, Typography, Spin, Alert } from "antd";
-import { BookOpen, ShoppingCart, DollarSign, Package } from "lucide-react";
-import StatCard from "./components/StatCard";
-import IncomeChart from "./components/IncomeChart";
-import RecentActivity from "./components/RecentActivity";
-import "./DashboardPage.scss";
+import { Spin, Alert } from "antd";
 import { useDocumentTitle } from "@/hooks";
 import { useDashboard } from "./hooks/useDashboard";
+import {
+  DashboardHeader,
+  DashboardStats,
+  IncomeChart,
+  RecentActivity,
+} from "./components";
+import "./DashboardPage.scss";
 
-const { Title, Text } = Typography;
-
-function DashboardPage() {
+export default function DashboardPage() {
   useDocumentTitle("Trang chủ - CMS");
   const { dashboard, isLoading, errorMessage } = useDashboard();
 
@@ -23,7 +23,7 @@ function DashboardPage() {
   if (isLoading) {
     return (
       <div className="dashboard-page">
-        <div className="dashboard-loading">
+        <div className="dashboard-page__loading">
           <Spin size="large" />
         </div>
       </div>
@@ -48,63 +48,22 @@ function DashboardPage() {
 
   return (
     <div className="dashboard-page">
-      {/* Page Header */}
-      <div className="dashboard-header">
-        <Title level={2} className="dashboard-title">
-          Dashboard
-        </Title>
-        <Text className="dashboard-description">
-          Tổng quan về hoạt động và doanh thu của hệ thống
-        </Text>
-      </div>
+      <DashboardHeader />
 
-      {/* Statistics Cards */}
-      <Row gutter={[16, 16]} className="dashboard-stats">
-        <Col xs={24} sm={12} lg={6}>
-          <StatCard
-            title="Tổng số Books"
-            value={dashboard.totalBooks}
-            icon={<BookOpen size={24} />}
-            color="#3b82f6"
-          />
-        </Col>
-        <Col xs={24} sm={12} lg={6}>
-          <StatCard
-            title="Tổng số đơn hàng"
-            value={dashboard.totalOrders}
-            icon={<ShoppingCart size={24} />}
-            color="#22c55e"
-          />
-        </Col>
-        <Col xs={24} sm={12} lg={6}>
-          <StatCard
-            title="Tổng doanh thu"
-            value={formatCurrency(dashboard.totalRevenue)}
-            icon={<DollarSign size={24} />}
-            color="#f59e0b"
-          />
-        </Col>
-        <Col xs={24} sm={12} lg={6}>
-          <StatCard
-            title="Đơn hàng gần đây"
-            value={dashboard.recentOrders.length}
-            icon={<Package size={24} />}
-            color="#8b5cf6"
-          />
-        </Col>
-      </Row>
+      <DashboardStats
+        totalBooks={dashboard.totalBooks}
+        totalOrders={dashboard.totalOrders}
+        totalRevenue={formatCurrency(dashboard.totalRevenue)}
+        recentOrdersCount={dashboard.recentOrders.length}
+      />
 
-      {/* Income Chart */}
-      <div className="dashboard-chart">
+      <div className="dashboard-page__chart">
         <IncomeChart />
       </div>
 
-      {/* Recent Activity */}
-      <div className="dashboard-activity">
+      <div className="dashboard-page__activity">
         <RecentActivity orders={dashboard.recentOrders} />
       </div>
     </div>
   );
 }
-
-export default DashboardPage;

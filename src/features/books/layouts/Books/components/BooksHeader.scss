@@ -1,0 +1,28 @@
+.books-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__title {
+    margin: 0 !important;
+  }
+
+  &__description {
+    color: #6b7280;
+  }
+
+  &__add-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
