@@ -90,6 +90,31 @@ export interface BookReview {
   createdAt: string;
 }
 
+export interface BookRatingUser {
+  id: string;
+  avatar: string;
+  username: string;
+}
+
+export interface BookRating {
+  id: string;
+  user: BookRatingUser;
+  content: string;
+  ratePoint: number;
+  agreement: number;
+  progress: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BookComment {
+  id: string;
+  user: BookRatingUser;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface BookDetail {
   id: string;
   publisherId: string;
@@ -113,6 +138,8 @@ export interface BookDetail {
   categories: SimpleCategory[];
   chapters: BookChapter[];
   reviews: BookReview[];
+  ratings?: BookRating[];
+  comments?: BookComment[];
 }
 
 export interface BookDetailResponse {
@@ -135,6 +162,10 @@ export interface ChapterDetail {
   slug: string;
   chapterNumber: number;
   status: BookStatus;
+  price: number;
+  isFree: boolean;
+  isOnSale: boolean;
+  salePercent: number;
   publishedAt: string;
   createdAt: string;
   updatedAt: string;
@@ -171,4 +202,99 @@ export interface CreateBookResponse {
   success: boolean;
   message: string;
   data: BookDetail;
+}
+
+// Chapter types
+// Theo API docs: title, isFree, price, galleries là required
+export interface CreateChapterPayload {
+  title: string;
+  isFree: boolean;
+  price: number;
+  isOnSale?: boolean;
+  salePercent?: number;
+  galleries: File[];
+}
+
+export interface CreateChapterResponse {
+  httpCode: number;
+  success: boolean;
+  message: string;
+  data: {
+    id: string;
+    title: string;
+    slug: string;
+    price: number;
+    isFree: boolean;
+    isOnSale: boolean;
+    salePercent: number;
+    status: ChapterStatus;
+    book: {
+      slug: string;
+      title: string;
+    };
+    createdAt: string;
+  };
+}
+
+export interface UpdateChapterPayload {
+  isFree?: boolean;
+  price?: number;
+  isOnSale?: boolean;
+  salePercent?: number;
+  galleries?: File[];
+}
+
+export interface UpdateChapterResponse {
+  httpCode: number;
+  success: boolean;
+  message: string;
+  data: {
+    id: string;
+    chapterNumber: number;
+  };
+}
+
+export interface DeleteChapterResponse {
+  httpCode: number;
+  success: boolean;
+  message: string;
+}
+
+// Delete Book types
+export interface DeleteBookResponse {
+  httpCode: number;
+  success: boolean;
+  message: string;
+  data: {
+    deletedBook: {
+      id: string;
+      title: string;
+    };
+  };
+}
+
+// Chapter Galleries Management types
+export interface RemoveImagesResponse {
+  httpCode: number;
+  success: boolean;
+  message: string;
+  data: {
+    deletedCount: number;
+  };
+}
+
+export interface AddImagesResponse {
+  httpCode: number;
+  success: boolean;
+  message: string;
+  data: {
+    addedCount: number;
+    newImageUrls: string[];
+  };
+}
+
+export interface ReorderImagesResponse {
+  httpCode: number;
+  success: boolean;
+  message: string;
 }

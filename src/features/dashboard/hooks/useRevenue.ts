@@ -4,6 +4,9 @@ import type { RevenueData } from "../types";
 
 interface UseRevenueOptions {
   enabled?: boolean;
+  groupBy?: "daily" | "weekly" | "monthly" | "yearly";
+  startDate?: string;
+  endDate?: string;
 }
 
 interface UseRevenueReturn {
@@ -15,7 +18,7 @@ interface UseRevenueReturn {
 }
 
 export function useRevenue(options: UseRevenueOptions = {}): UseRevenueReturn {
-  const { enabled = true } = options;
+  const { enabled = true, groupBy, startDate, endDate } = options;
   const [revenue, setRevenue] = useState<RevenueData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -29,7 +32,7 @@ export function useRevenue(options: UseRevenueOptions = {}): UseRevenueReturn {
       setIsLoading(true);
       setErrorMessage(null);
       try {
-        const result = await fetchRevenue(signal);
+        const result = await fetchRevenue({ groupBy, startDate, endDate }, signal);
         setRevenue(result.data);
         setMessage(result.message || "");
       } catch (error) {
@@ -46,7 +49,7 @@ export function useRevenue(options: UseRevenueOptions = {}): UseRevenueReturn {
         setIsLoading(false);
       }
     },
-    [enabled]
+    [enabled, groupBy, startDate, endDate]
   );
 
   useEffect(() => {

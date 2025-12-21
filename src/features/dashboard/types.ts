@@ -41,3 +41,16 @@ export interface RevenueResponse {
   message: string;
   data: RevenueData;
 }
+
+export interface RevenueChartData {
+  period: string;
+  ordersCount: number;
+  totalRevenue: number;
+}
+
+export interface RevenueChartResponse {
+  httpCode: number;
+  success: boolean;
+  message: string;
+  data: RevenueChartData[];
+}

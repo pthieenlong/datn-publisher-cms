@@ -38,7 +38,16 @@ function ChapterDetailPage() {
       chapterSlug,
     });
   const carouselRef = useRef<CarouselRef | null>(null);
+  const prevChapterIdRef = useRef<string | undefined>(undefined);
   const [currentSlide, setCurrentSlide] = useState(0);
+
+  // Reset slide khi chapter thay đổi (sync logic)
+  if (chapter?.id !== prevChapterIdRef.current) {
+    prevChapterIdRef.current = chapter?.id;
+    if (currentSlide !== 0) {
+      setCurrentSlide(0);
+    }
+  }
 
   useDocumentTitle(
     chapter
@@ -92,8 +101,7 @@ function ChapterDetailPage() {
   const statusInfo = getStatusTag(chapter?.status ?? "DRAFT");
 
   useEffect(() => {
-    setCurrentSlide(0);
-    if (chapter && carouselRef.current) {
+    if (carouselRef.current) {
       carouselRef.current.goTo(0, false);
     }
   }, [chapter?.id]);

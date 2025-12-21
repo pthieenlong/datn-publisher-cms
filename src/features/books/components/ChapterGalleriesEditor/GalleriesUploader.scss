@@ -1,0 +1,133 @@
+.galleries-uploader {
+  &__header {
+    margin-bottom: 16px;
+  }
+
+  &__title {
+    margin: 0 0 4px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.88);
+  }
+
+  &__subtitle {
+    margin: 0;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.45);
+  }
+
+  &__upload {
+    margin-bottom: 16px;
+
+    .ant-upload-select {
+      width: 100% !important;
+      height: auto !important;
+      min-height: 104px;
+    }
+  }
+
+  &__upload-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    color: rgba(0, 0, 0, 0.45);
+    transition: color 0.3s;
+
+    &:hover {
+      color: #1890ff;
+    }
+  }
+
+  &__image-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  &__image-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__image-preview {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #d9d9d9;
+    transition: all 0.3s;
+
+    &:hover {
+      border-color: #1890ff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+      .galleries-uploader__image-overlay {
+        opacity: 1;
+      }
+    }
+  }
+
+  &__image-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &__image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  &__image-control {
+    color: white !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+
+    &:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.2) !important;
+      border-color: rgba(255, 255, 255, 0.5) !important;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+    }
+
+    &.ant-btn-dangerous {
+      &:hover:not(:disabled) {
+        background: rgba(255, 77, 79, 0.3) !important;
+        border-color: rgba(255, 77, 79, 0.6) !important;
+      }
+    }
+  }
+
+  &__image-name {
+    margin: 0;
+    text-align: center;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 0.65);
+    font-weight: 500;
+  }
+
+  &__empty {
+    padding: 48px 16px;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.45);
+    background: #fafafa;
+    border: 1px dashed #d9d9d9;
+    border-radius: 8px;
+  }
+}

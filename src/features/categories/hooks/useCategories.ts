@@ -10,13 +10,11 @@ interface UseCategoriesReturn {
 
 export function useCategories(): UseCategoriesReturn {
   const [categories, setCategories] = useState<Category[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     let mounted = true;
-    setIsLoading(true);
-    setErrorMessage(null);
 
     fetchCategories()
       .then((response) => {

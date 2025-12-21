@@ -42,10 +42,7 @@ export default function OrderPaymentCard({ order }: OrderPaymentCardProps) {
     }
   };
 
-  const totalAmount = order.orderItems.reduce(
-    (sum, item) => sum + item.finalPrice,
-    0
-  );
+  const totalAmount = order.totalAmount;
 
   return (
     <Card title="Thông tin thanh toán" className="order-payment-card">

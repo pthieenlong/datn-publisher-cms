@@ -1,4 +1,5 @@
 import { Card, Typography, Button, Space } from "antd";
+import { Plus } from "lucide-react";
 import ChapterList from "../../../components/ChapterList";
 import type { BookChapter } from "@/features/books/types";
 import "./BookDetailChapters.scss";
@@ -14,6 +15,8 @@ export interface BookDetailChaptersProps {
   totalChapters: number;
   totalPages: number;
   onPageChange: (page: number) => void;
+  onCreateChapter: () => void;
+  onRefresh?: () => void;
 }
 
 export default function BookDetailChapters({
@@ -25,12 +28,24 @@ export default function BookDetailChapters({
   totalChapters,
   totalPages,
   onPageChange,
+  onCreateChapter,
+  onRefresh,
 }: BookDetailChaptersProps) {
   return (
     <Card className="book-detail-chapters">
-      <Title level={4} className="book-detail-chapters__title">
-        Danh sách chương
-      </Title>
+      <div className="book-detail-chapters__header">
+        <Title level={4} className="book-detail-chapters__title">
+          Danh sách chương
+        </Title>
+        <Button
+          type="primary"
+          icon={<Plus size={16} />}
+          onClick={onCreateChapter}
+          className="book-detail-chapters__create-button"
+        >
+          Tạo chương mới
+        </Button>
+      </div>
       <ChapterList
         chapters={chapters}
         bookSlug={bookSlug}
@@ -39,6 +54,7 @@ export default function BookDetailChapters({
         pageSize={pageSize}
         total={totalChapters}
         onPageChange={onPageChange}
+        onRefresh={onRefresh}
       />
       <div className="book-detail-chapters__pagination">
         <Space>

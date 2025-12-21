@@ -42,10 +42,13 @@ export default function BookDetailInfo({
           </Col>
           <Col xs={24} md={16}>
             <div className="book-detail-info__content">
-              <Title level={3} className="book-detail-info__title">
-                {book.title}
-              </Title>
-              <Text className="book-detail-info__slug">{book.slug}</Text>
+              <div className="book-detail-info__title-group">
+                <Title level={3} className="book-detail-info__title">
+                  {book.title}
+                </Title>
+                <Text className="book-detail-info__slug">{book.slug}</Text>
+              </div>
+
               <div className="book-detail-info__description">
                 <Text>{book.description}</Text>
               </div>
@@ -55,14 +58,13 @@ export default function BookDetailInfo({
                   <Text>{book.author}</Text>
                 </div>
                 <div className="book-detail-info__meta-item">
-                  <Text strong>Chính sách:</Text>
-                  <Text>{book.policy || "Chưa thiết lập"}</Text>
-                </div>
-                <div className="book-detail-info__meta-item">
                   <Text strong>Thể loại:</Text>
                   <Space wrap>
                     {book.categories.map((category) => (
-                      <Tag key={category.id} className="book-detail-info__category-tag">
+                      <Tag
+                        key={category.id}
+                        className="book-detail-info__category-tag"
+                      >
                         {category.title}
                       </Tag>
                     ))}

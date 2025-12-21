@@ -168,7 +168,7 @@ export function useBookDetail(
       return;
     }
     setChapterPage((prev) => Math.max(prev - 1, 1));
-  }, []);
+  }, [chapterTotalPages]);
 
   const refetch = useCallback(async () => {
     await loadBookDetail();

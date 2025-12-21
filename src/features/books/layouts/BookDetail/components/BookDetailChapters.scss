@@ -1,8 +1,21 @@
 .book-detail-chapters {
   height: 100%;
 
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
   &__title {
-    margin-bottom: 16px !important;
+    margin: 0 !important;
+  }
+
+  &__create-button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
   }
 
   &__pagination {

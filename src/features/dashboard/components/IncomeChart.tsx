@@ -9,7 +9,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { useRevenue } from "../hooks/useRevenue";
+import { useRevenueChart } from "../hooks/useRevenueChart";
 import "./IncomeChart.scss";
 
 type TimeRange = "day" | "month" | "year";
@@ -20,8 +20,17 @@ interface IIncomeData {
 }
 
 function IncomeChart() {
-  const [timeRange, setTimeRange] = useState<TimeRange>("year");
-  const { revenue, isLoading, errorMessage } = useRevenue();
+  const [timeRange, setTimeRange] = useState<TimeRange>("month");
+
+  const groupByMap: Record<TimeRange, "daily" | "weekly" | "monthly"> = {
+    day: "daily",
+    month: "weekly",
+    year: "monthly",
+  };
+
+  const { chartData, isLoading, errorMessage } = useRevenueChart({
+    groupBy: groupByMap[timeRange],
+  });
 
   const formatCurrency = (value: number): string => {
     return new Intl.NumberFormat("vi-VN", {
@@ -31,38 +40,13 @@ function IncomeChart() {
   };
 
   const getData = useMemo((): IIncomeData[] => {
-    if (!revenue) return [];
+    if (!chartData || chartData.length === 0) return [];
 
-    // Sử dụng revenueByPeriod cho tất cả các tab
-    if (revenue.revenueByPeriod && revenue.revenueByPeriod.length > 0) {
-      return revenue.revenueByPeriod.map((period) => ({
-        date: period.period,
-        income: period.revenue,
-      }));
-    }
-
-    // Fallback nếu không có revenueByPeriod
-    switch (timeRange) {
-      case "day":
-        return [
-          {
-            date: "Hôm nay",
-            income: revenue.dailyRevenue,
-          },
-        ];
-      case "month":
-        return [
-          {
-            date: "Tháng này",
-            income: revenue.monthlyRevenue,
-          },
-        ];
-      case "year":
-        return [];
-      default:
-        return [];
-    }
-  }, [revenue, timeRange]);
+    return chartData.map((item) => ({
+      date: item.period,
+      income: item.totalRevenue,
+    }));
+  }, [chartData]);
 
   const tabItems = [
     {
@@ -97,11 +81,17 @@ function IncomeChart() {
     );
   }
 
-  if (!revenue || getData.length === 0) {
+  if (!chartData || getData.length === 0) {
     return (
       <Card className="income-chart-card" bordered>
         <div className="income-chart-header">
           <h3 className="income-chart-title">Biểu đồ Income</h3>
+          <Tabs
+            activeKey={timeRange}
+            items={tabItems}
+            onChange={(key) => setTimeRange(key as TimeRange)}
+            className="income-chart-tabs"
+          />
         </div>
         <Empty description="Không có dữ liệu" />
       </Card>
@@ -136,11 +126,7 @@ function IncomeChart() {
                 borderRadius: "8px",
               }}
             />
-            <Bar
-              dataKey="income"
-              fill="#3b82f6"
-              radius={[8, 8, 0, 0]}
-            />
+            <Bar dataKey="income" fill="#3b82f6" radius={[8, 8, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </div>

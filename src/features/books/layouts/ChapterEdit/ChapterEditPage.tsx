@@ -1,62 +1,33 @@
-import {
-  Form,
-  Upload,
-  Button,
-  Space,
-  Card,
-  message,
-  Image,
-  Alert,
-  Spin,
-} from "antd";
-import {
-  ArrowLeft,
-  Upload as UploadIcon,
-  Save,
-  X,
-  ArrowUp,
-  ArrowDown,
-  Trash2,
-} from "lucide-react";
+import { Alert, Spin, Button, Space } from "antd";
+import { ArrowLeft } from "lucide-react";
 import { useNavigate, useParams } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import type { UploadChangeParam, UploadFile } from "antd/es/upload/interface";
-import "./ChapterEditPage.scss";
+import { useMemo } from "react";
 import { useDocumentTitle } from "@/hooks";
 import { useChapterDetail } from "../../hooks/useChapterDetail";
+import { useUpdateChapter } from "../../hooks/useUpdateChapter";
+import { ChapterGalleriesEditor } from "../../components/ChapterGalleriesEditor";
+import { ChapterEditForm } from "./components";
+import type { ChapterEditFormValues } from "./components";
+import "./ChapterEditPage.scss";
 
-interface ImageItem extends UploadFile {
-  isExisting?: boolean; // Đánh dấu ảnh đã tồn tại từ server
-}
-
-function ChapterEditPage() {
+export default function ChapterEditPage() {
   const { bookSlug, chapterSlug } = useParams({
     from: "/books/$bookSlug/chapters/$chapterSlug/edit",
   });
   const navigate = useNavigate();
-  const [form] = Form.useForm();
-  const [fileList, setFileList] = useState<ImageItem[]>([]);
-  const [loading, setLoading] = useState(false);
-  const { chapter, isLoading, errorMessage } = useChapterDetail({
+
+  const { chapter, isLoading, errorMessage, refetch } = useChapterDetail({
     bookSlug,
     chapterSlug,
   });
 
+  const { updateExistingChapter, isUpdating: isUpdatingMetadata } = useUpdateChapter();
+
   useDocumentTitle(`Chỉnh sửa Chương - CMS`);
 
-  useEffect(() => {
-    if (!chapter) {
-      setFileList([]);
-      return;
-    }
-    const existingFiles: ImageItem[] = chapter.content.map((url, index) => ({
-      uid: `existing-${index}`,
-      name: `Trang ${index + 1}.jpg`,
-      url,
-      status: "done",
-      isExisting: true,
-    }));
-    setFileList(existingFiles);
+  // Derive original image URLs from chapter
+  const originalImageUrls = useMemo(() => {
+    return chapter?.content ?? [];
   }, [chapter]);
 
   const handleBack = () => {
@@ -66,248 +37,106 @@ function ChapterEditPage() {
     });
   };
 
-  const handleCancel = () => {
-    handleBack();
-  };
+  const handleSubmit = async (values: ChapterEditFormValues) => {
+    if (!chapter) return;
 
-  const handleSave = async () => {
-    if (!chapter) {
-      return;
-    }
-    setLoading(true);
-    try {
-      // Lọc ra các file mới (không phải existing)
-      const newFiles = fileList
-        .filter((item) => !item.isExisting && item.originFileObj)
-        .map((item) => item.originFileObj as File);
+    // Update metadata (price, isFree, etc.)
+    // Note: title không thể cập nhật qua API này theo API docs
+    const payload = {
+      isFree: values.isFree,
+      price: values.isFree ? 0 : values.price,
+      isOnSale: values.isFree ? false : values.isOnSale,
+      salePercent: values.isFree || !values.isOnSale ? 0 : values.salePercent,
+    };
 
-      // Lấy danh sách URL của ảnh existing còn lại
-      const existingUrls = fileList
-        .filter((item) => item.isExisting && item.url)
-        .map((item) => item.url as string);
+    const metadataSuccess = await updateExistingChapter(
+      bookSlug,
+      chapterSlug,
+      payload
+    );
 
-      console.log("Save chapter images:", {
-        chapterId: chapter.id,
-        newFiles,
-        existingUrls,
-        order: fileList.map((item) => item.uid),
-      });
-
-      // API call sẽ ở đây
-      message.success("Đã lưu thành công");
+    if (metadataSuccess) {
       handleBack();
-    } catch (error) {
-      message.error("Có lỗi xảy ra khi lưu");
-    } finally {
-      setLoading(false);
     }
   };
 
-  const handleUploadChange = (info: UploadChangeParam<UploadFile>) => {
-    const mappedList: ImageItem[] = info.fileList.map((file) => {
-      const currentFile = file as ImageItem;
-      return {
-        ...currentFile,
-        isExisting: currentFile.isExisting,
-      };
-    });
-    setFileList(mappedList);
-  };
+  const isUpdating = isUpdatingMetadata;
 
-  const beforeUpload = (file: File) => {
-    const isImage = file.type.startsWith("image/");
-    if (!isImage) {
-      message.error("Chỉ được upload file ảnh!");
-      return false;
-    }
-    const isLt10M = file.size / 1024 / 1024 < 10;
-    if (!isLt10M) {
-      message.error("Ảnh phải nhỏ hơn 10MB!");
-      return false;
-    }
-    return true; // Allow upload
-  };
+  if (isLoading && !chapter) {
+    return (
+      <div className="chapter-edit-page">
+        <div className="chapter-edit-page__loading">
+          <Spin size="large" tip="Đang tải dữ liệu chương..." />
+        </div>
+      </div>
+    );
+  }
 
-  const handleRemove = (file: UploadFile) => {
-    const newFileList = fileList.filter((item) => item.uid !== file.uid);
-    setFileList(newFileList);
-    return true;
-  };
+  if (errorMessage || !chapter) {
+    return (
+      <div className="chapter-edit-page">
+        <Alert
+          type="error"
+          message="Không thể tải chi tiết chương"
+          description={errorMessage || "Chương không tồn tại"}
+          showIcon
+          closable
+        />
+      </div>
+    );
+  }
 
-  const handleMoveUp = (index: number) => {
-    if (index === 0) return;
-    const newFileList = [...fileList];
-    [newFileList[index - 1], newFileList[index]] = [
-      newFileList[index],
-      newFileList[index - 1],
-    ];
-    setFileList(newFileList);
-  };
-
-  const handleMoveDown = (index: number) => {
-    if (index === fileList.length - 1) return;
-    const newFileList = [...fileList];
-    [newFileList[index], newFileList[index + 1]] = [
-      newFileList[index + 1],
-      newFileList[index],
-    ];
-    setFileList(newFileList);
+  const initialValues: ChapterEditFormValues = {
+    title: chapter.title,
+    isFree: chapter.isFree ?? true,
+    price: chapter.price ?? 0,
+    isOnSale: chapter.isOnSale ?? false,
+    salePercent: chapter.salePercent ?? 0,
   };
 
   return (
     <div className="chapter-edit-page">
-      {/* Header Section */}
-      <div className="chapter-edit-header">
+      {/* Header */}
+      <div className="chapter-edit-page__header">
         <Space>
           <Button
             icon={<ArrowLeft size={20} />}
             onClick={handleBack}
-            className="chapter-edit-back-button"
+            disabled={isUpdating}
+            className="chapter-edit-page__back-button"
           >
             Quay lại
           </Button>
-          <h2 className="chapter-edit-title">Chỉnh sửa Chương</h2>
+          <div className="chapter-edit-page__title-section">
+            <h2 className="chapter-edit-page__title">Chỉnh sửa Chương</h2>
+            <p className="chapter-edit-page__subtitle">
+              {chapter.title} • {chapter.book.title}
+            </p>
+          </div>
         </Space>
       </div>
 
-      {errorMessage && (
-        <Alert
-          type="error"
-          message="Không thể tải chi tiết chương"
-          description={errorMessage}
-          showIcon
-          closable
-          className="chapter-edit-error"
+      {/* Galleries Editor - Standalone với auto-save */}
+      <div className="chapter-edit-page__section">
+        <ChapterGalleriesEditor
+          bookSlug={bookSlug}
+          chapterSlug={chapterSlug}
+          initialGalleries={originalImageUrls}
+          mode="standalone"
+          showSaveButton={true}
+          onSuccess={refetch}
         />
-      )}
+      </div>
 
-      {isLoading && !chapter ? (
-        <div className="chapter-edit-loading">
-          <Spin tip="Đang tải dữ liệu chương..." />
-        </div>
-      ) : (
-        <>
-          {/* Form Section */}
-          <Card className="chapter-edit-form-card">
-            <Form form={form} layout="vertical">
-              <div className="chapter-edit-form-content">
-                <div className="chapter-edit-info">
-                  <h3 className="chapter-edit-info-title">
-                    {chapter?.title ?? "Đang tải..."}
-                  </h3>
-                  <p className="chapter-edit-info-slug">
-                    {chapter?.slug ?? ""}
-                  </p>
-                </div>
-
-                <div className="chapter-edit-images-section">
-                  <h4 className="chapter-edit-section-title">
-                    Quản lý hình ảnh
-                  </h4>
-
-                  <Upload
-                    listType="picture-card"
-                    fileList={fileList}
-                    onChange={handleUploadChange}
-                    beforeUpload={beforeUpload}
-                    onRemove={handleRemove}
-                    multiple
-                    className="chapter-edit-upload"
-                    disabled={!chapter}
-                  >
-                    {fileList.length < 50 && (
-                      <div>
-                        <UploadIcon size={24} />
-                        <div style={{ marginTop: 8 }}>Upload</div>
-                      </div>
-                    )}
-                  </Upload>
-
-                  {/* Image List with Controls */}
-                  {fileList.length > 0 && (
-                    <div className="chapter-edit-image-list">
-                      {fileList.map((file, index) => (
-                        <div key={file.uid} className="chapter-edit-image-item">
-                          <div className="chapter-edit-image-preview">
-                            {file.url ? (
-                              <Image
-                                src={file.url}
-                                alt={file.name}
-                                className="chapter-edit-image-thumb"
-                                preview={false}
-                              />
-                            ) : file.originFileObj ? (
-                              <Image
-                                src={URL.createObjectURL(file.originFileObj)}
-                                alt={file.name}
-                                className="chapter-edit-image-thumb"
-                                preview={false}
-                              />
-                            ) : null}
-                            <div className="chapter-edit-image-overlay">
-                              <Space>
-                                <Button
-                                  type="text"
-                                  icon={<ArrowUp size={18} />}
-                                  onClick={() => handleMoveUp(index)}
-                                  disabled={index === 0}
-                                  className="chapter-edit-image-control"
-                                />
-                                <Button
-                                  type="text"
-                                  icon={<ArrowDown size={18} />}
-                                  onClick={() => handleMoveDown(index)}
-                                  disabled={index === fileList.length - 1}
-                                  className="chapter-edit-image-control"
-                                />
-                                <Button
-                                  type="text"
-                                  danger
-                                  icon={<Trash2 size={18} />}
-                                  onClick={() => handleRemove(file)}
-                                  className="chapter-edit-image-control"
-                                />
-                              </Space>
-                            </div>
-                          </div>
-                          <p className="chapter-edit-image-name">
-                            Trang {index + 1}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="chapter-edit-actions">
-                <Space>
-                  <Button
-                    icon={<X size={20} />}
-                    onClick={handleCancel}
-                    className="chapter-edit-action-button"
-                  >
-                    Hủy
-                  </Button>
-                  <Button
-                    type="primary"
-                    icon={<Save size={20} />}
-                    onClick={handleSave}
-                    loading={loading}
-                    className="chapter-edit-action-button"
-                    disabled={!chapter}
-                  >
-                    Lưu thay đổi
-                  </Button>
-                </Space>
-              </div>
-            </Form>
-          </Card>
-        </>
-      )}
+      {/* Metadata Form */}
+      <div className="chapter-edit-page__section">
+        <ChapterEditForm
+          initialValues={initialValues}
+          isLoading={isUpdatingMetadata}
+          onSubmit={handleSubmit}
+          onCancel={handleBack}
+        />
+      </div>
     </div>
   );
 }
-
-export default ChapterEditPage;

@@ -23,4 +23,28 @@
     align-items: center;
     gap: 8px;
   }
+
+  &__update {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__popover {
+    max-width: 500px;
+  }
+
+  &__popover-content {
+    width: 450px;
+    max-height: 600px;
+    overflow-y: auto;
+  }
+
+  &__popover-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #f0f0f0;
+  }
 }

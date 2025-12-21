@@ -12,6 +12,7 @@ import {
   BookEditPage,
   ChapterDetailPage,
   ChapterEditPage,
+  ChapterCreatePage,
 } from "@/features/books";
 import { OrdersPage, OrderDetailPage } from "@/features/orders";
 import { LoginPage } from "@/features/auth";
@@ -57,6 +58,11 @@ const chapterDetailRoute = createRoute({
   path: "/books/$bookSlug/chapters/$chapterSlug",
   component: ChapterDetailPage,
 });
+const chapterCreateRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/books/$bookSlug/create-chapter",
+  component: ChapterCreatePage,
+});
 const chapterEditRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/books/$bookSlug/chapters/$chapterSlug/edit",
@@ -80,6 +86,7 @@ const routeTree = rootRoute.addChildren([
   bookDetailRoute,
   bookEditRoute,
   chapterDetailRoute,
+  chapterCreateRoute,
   chapterEditRoute,
   ordersRoute,
   orderDetailRoute,

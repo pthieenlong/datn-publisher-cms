@@ -1,0 +1,65 @@
+.chapter-create-page {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  &__loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+  }
+
+  &__header {
+    margin-bottom: 24px;
+  }
+
+  &__back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border: 1px solid #d9d9d9;
+    border-radius: 6px;
+    background: white;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+    margin-bottom: 16px;
+
+    &:hover:not(:disabled) {
+      color: #1890ff;
+      border-color: #1890ff;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  &__title-section {
+    margin-top: 8px;
+  }
+
+  &__title {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    color: #262626;
+  }
+
+  &__subtitle {
+    font-size: 14px;
+    color: #8c8c8c;
+    margin: 0;
+
+    strong {
+      color: #262626;
+    }
+  }
+
+  &__error {
+    margin-bottom: 24px;
+  }
+}

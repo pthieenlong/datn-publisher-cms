@@ -1,0 +1,26 @@
+.reviews-table {
+  &__empty {
+    text-align: center;
+    padding: 32px 16px;
+    color: rgba(0, 0, 0, 0.45);
+  }
+
+  &__dates {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__date-created,
+  &__date-updated {
+    display: block;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .ant-table {
+    .ant-table-cell {
+      vertical-align: middle;
+    }
+  }
+}

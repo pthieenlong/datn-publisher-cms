@@ -1,6 +1,6 @@
-import { Alert, Spin, Card, Typography, Row, Col, Form, message } from "antd";
+import { Alert, Spin, Card, Typography, message } from "antd";
 import { useNavigate, useParams } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useDocumentTitle } from "@/hooks";
 import { useBookDetail } from "../../hooks/useBookDetail";
 import { useCategories } from "@/features/categories";
@@ -9,12 +9,10 @@ import {
   BookDetailHeader,
   BookDetailStats,
   BookDetailInfo,
-  BookDetailPricing,
   BookDetailChapters,
-  BookQuickEditForm,
+  BookDetailReviewsComments,
 } from "./components";
-import type { BookQuickEditFormValues } from "./components";
-import type { PricingInfo } from "./components/BookDetailPricing";
+import type { BookUpdateFormValues, PricingInfo } from "./components";
 import "./BookDetailPage.scss";
 
 const { Title, Text } = Typography;
@@ -33,8 +31,6 @@ export default function BookDetailPage() {
     setChapterPage,
     refetch,
   } = useBookDetail({ slug });
-  const [quickEditForm] = Form.useForm<BookQuickEditFormValues>();
-  const [isQuickSaving, setIsQuickSaving] = useState(false);
   const {
     categories,
     isLoading: loadingCategories,
@@ -46,13 +42,6 @@ export default function BookDetailPage() {
       ? `${book.title} - Chi tiết Truyện tranh - CMS`
       : "Chi tiết Truyện tranh - CMS"
   );
-
-  const formatCurrency = (value: number): string => {
-    return new Intl.NumberFormat("vi-VN", {
-      style: "currency",
-      currency: "VND",
-    }).format(value);
-  };
 
   const getStatusTag = (status?: string) => {
     const statusMap: Record<string, { color: string; text: string }> = {
@@ -74,76 +63,37 @@ export default function BookDetailPage() {
 
   const handleDelete = () => {
     // TODO: Implement delete functionality
-    console.log("Delete book:", book?.id);
+  };
+
+  const handleUpdateSubmit = async (values: BookUpdateFormValues) => {
+    const payload = {
+      title: values.title,
+      author: values.author,
+      description: values.description,
+      isFree: values.isFree,
+      isOnSale: values.isOnSale,
+      price: values.price,
+      salePercent: values.salePercent,
+      categories: values.categories,
+    };
+    const response = await updateBookDetail(slug, payload);
+    message.success(response.message || "Cập nhật truyện thành công");
+    await refetch();
   };
 
   const handleChapterPageChange = (page: number) => {
     setChapterPage(page);
   };
 
+  const handleCreateChapter = () => {
+    if (!book) return;
+    navigate({
+      to: "/books/$bookSlug/create-chapter",
+      params: { bookSlug: book.slug },
+    });
+  };
+
   const statusInfo = getStatusTag(book?.status);
-
-  useEffect(() => {
-    if (!book) {
-      quickEditForm.resetFields();
-      return;
-    }
-    quickEditForm.setFieldsValue({
-      title: book.title,
-      slug: book.slug,
-      description: book.description,
-      author: book.author,
-      policy: book.policy,
-      status: book.status,
-      price: book.price,
-      salePercent: book.salePercent,
-      isFree: book.isFree,
-      isOnSale: book.isOnSale,
-    });
-  }, [book, quickEditForm]);
-
-  const handleQuickEditSubmit = async (values: BookQuickEditFormValues) => {
-    setIsQuickSaving(true);
-    try {
-      const payload = {
-        title: values.title,
-        author: values.author,
-        description: values.description,
-        isFree: values.isFree,
-        isOnSale: values.isOnSale,
-        price: values.price,
-        salePercent: values.salePercent,
-        categories: values.categories,
-      };
-      const response = await updateBookDetail(slug, payload);
-      message.success(response.message || "Cập nhật truyện thành công");
-      await refetch();
-    } catch (error: unknown) {
-      console.error(error);
-      message.error("Không thể lưu thay đổi");
-    } finally {
-      setIsQuickSaving(false);
-    }
-  };
-
-  const resetQuickEditForm = () => {
-    if (!book) {
-      quickEditForm.resetFields();
-      return;
-    }
-    quickEditForm.setFieldsValue({
-      title: book.title,
-      slug: book.slug,
-      description: book.description,
-      author: book.author,
-      policy: book.policy,
-      status: book.status,
-      price: book.price,
-      salePercent: book.salePercent,
-      isFree: book.isFree,
-      isOnSale: book.isOnSale,
-    });
-  };
 
   const pricingInfo: PricingInfo = useMemo(() => {
     if (!book) {
@@ -159,8 +109,8 @@ export default function BookDetailPage() {
     const salePrice = book.isFree
       ? 0
       : salePercent > 0
-        ? Math.max(0, basePrice - (basePrice * salePercent) / 100)
-        : basePrice;
+      ? Math.max(0, basePrice - (basePrice * salePercent) / 100)
+      : basePrice;
     return {
       basePrice,
       salePercent,
@@ -168,14 +118,6 @@ export default function BookDetailPage() {
       isFree: book.isFree,
     };
   }, [book]);
-
-  const priceDisplay = useMemo(() => {
-    if (!book) return "0";
-    if (book.isFree || pricingInfo.salePrice === 0) {
-      return "Miễn phí";
-    }
-    return formatCurrency(pricingInfo.salePrice);
-  }, [book, pricingInfo]);
 
   if (loadingCategories) {
     return <Spin tip="Đang tải danh sách thể loại..." />;
@@ -193,6 +135,9 @@ export default function BookDetailPage() {
         onRefetch={refetch}
         onDelete={handleDelete}
         isBookLoaded={!!book}
+        book={book}
+        categories={categories}
+        onUpdateSubmit={handleUpdateSubmit}
       />
 
       {errorMessage && (
@@ -216,7 +161,9 @@ export default function BookDetailPage() {
             chapterCount={book.chapters.length}
             viewCount={book.view ?? 0}
             likeCount={book.likeCount ?? 0}
-            priceDisplay={priceDisplay}
+            pricingInfo={pricingInfo}
+            statusColor={statusInfo.color}
+            statusText={statusInfo.text}
           />
 
           <BookDetailInfo
@@ -225,38 +172,29 @@ export default function BookDetailPage() {
             statusText={statusInfo.text}
           />
 
-          <div className="book-detail-page__bottom">
-            <Row gutter={[16, 16]}>
-              <Col xs={24} lg={12}>
-                <BookDetailPricing
-                  pricingInfo={pricingInfo}
-                  statusColor={statusInfo.color}
-                  statusText={statusInfo.text}
-                />
-              </Col>
-              <Col xs={24} lg={12}>
-                <BookDetailChapters
-                  chapters={currentChapters}
-                  bookSlug={book.slug}
-                  isLoading={isLoading}
-                  page={chapterPage}
-                  pageSize={chapterPageSize}
-                  totalChapters={book.chapters.length}
-                  totalPages={chapterTotalPages}
-                  onPageChange={handleChapterPageChange}
-                />
-              </Col>
-            </Row>
+          <div className="book-detail-page__content-grid">
+            <div className="book-detail-page__reviews-comments">
+              <BookDetailReviewsComments
+                ratings={book.ratings}
+                comments={book.comments}
+                loading={isLoading}
+              />
+            </div>
+            <div className="book-detail-page__chapters">
+              <BookDetailChapters
+                chapters={currentChapters}
+                bookSlug={book.slug}
+                isLoading={isLoading}
+                page={chapterPage}
+                pageSize={chapterPageSize}
+                totalChapters={book.chapters.length}
+                totalPages={chapterTotalPages}
+                onPageChange={handleChapterPageChange}
+                onCreateChapter={handleCreateChapter}
+                onRefresh={refetch}
+              />
+            </div>
           </div>
-
-          <BookQuickEditForm
-            form={quickEditForm}
-            book={book}
-            categories={categories}
-            isSubmitting={isQuickSaving}
-            onSubmit={handleQuickEditSubmit}
-            onReset={resetQuickEditForm}
-          />
         </>
       ) : (
         <Card className="book-detail-page__empty">

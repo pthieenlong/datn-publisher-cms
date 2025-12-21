@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 
 // Sử dụng proxy trong development để tránh vấn đề SameSite cookie
 // In development, use /api which will be proxied by Vite
 // In production, use the full API URL
-const API_URL =  "http://180.93.42.9:3000";
+const API_URL = import.meta.env.DEV ? "/api" : "http://localhost:3000";
 
 if (import.meta.env.DEV) {
   console.log("🔧 [Axios] Using proxy path:", API_URL);
-  console.log("🔧 [Axios] Make sure Vite dev server is running on port 5173");
+  console.log("🔧 [Axios] Vite will proxy /api requests to http://localhost:3000");
 }
 
 const axiosInstance = axios.create({
@@ -51,21 +51,24 @@ axiosInstance.interceptors.response.use(
     ) {
       originalRequest._retry = true;
 
-      // Không refresh token nếu request là refresh token endpoint
-      // Cho phép refresh ngay cả khi ở login page nếu là request /auth/me (sau khi login thành công)
       if (
         originalRequest.url?.includes("/auth/refresh-token") ||
-        (isLoginPage && !originalRequest.url?.includes("/auth/me"))
+        originalRequest.url?.includes("/auth/login") ||
+        originalRequest.skipAuthRefresh ||
+        isLoginPage
       ) {
         return Promise.reject(error);
       }
 
       try {
         await axiosInstance.post("/auth/refresh-token");
-
         return axiosInstance(originalRequest);
       } catch (refreshError) {
         console.error("❌ Refresh token failed:", refreshError);
+        // Redirect to login if refresh fails
+        if (typeof window !== "undefined" && !isLoginPage) {
+          window.location.href = "/login";
+        }
         return Promise.reject(refreshError);
       }
     }
@@ -82,29 +85,8 @@ axiosInstance.interceptors.response.use(
 );
 export default axiosInstance;
 
-export const fetchMe = async (): Promise<any> => {
-  try {
-    const res = await axiosInstance.get("/auth/me");
-    return res.data;
-  } catch (err: unknown) {
-    if (
-      err instanceof AxiosError &&
-      (err.response?.status === 401 || err.response?.status === 403)
-    ) {
-      try {
-        // Đợi một chút để đảm bảo cookies đã được set (nếu vừa login)
-        await new Promise((resolve) => setTimeout(resolve, 200));
-        await axiosInstance.post("/auth/refresh-token");
-        const retry = await axiosInstance.get("/auth/me");
-        return retry.data;
-      } catch (refreshErr) {
-        console.error("❌ fetchMe refresh failed:", refreshErr);
-        if (typeof window !== "undefined") {
-          // window.location.href = "/login";
-        }
-        throw refreshErr;
-      }
-    }
-    throw err;
-  }
+export const fetchMe = async (skipAuthRefresh = false): Promise<any> => {
+  const config = skipAuthRefresh ? ({ skipAuthRefresh: true } as any) : {};
+  const res = await axiosInstance.get("/auth/me", config);
+  return res.data;
 };

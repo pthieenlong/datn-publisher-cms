@@ -1,10 +1,11 @@
-import { Table, Button, Space, Tag } from "antd";
+import { Table, Button, Space, Tag, Modal, message } from "antd";
 import { Eye, Edit, Trash2 } from "lucide-react";
 import type { ColumnsType } from "antd/es/table";
 import { useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
 import "./ChapterList.scss";
 import type { BookChapter } from "../types";
-
+import { useDeleteChapter } from "../hooks/useDeleteChapter";
 interface ChapterListProps {
   chapters: BookChapter[];
   bookSlug: string;
@@ -13,6 +14,7 @@ interface ChapterListProps {
   pageSize: number;
   total: number;
   onPageChange: (page: number) => void;
+  onRefresh?: () => void;
 }
 
 function ChapterList({
@@ -23,9 +25,24 @@ function ChapterList({
   pageSize,
   total,
   onPageChange,
+  onRefresh,
 }: ChapterListProps) {
   const navigate = useNavigate();
+  const { deleteExistingChapter, isDeleting, errorMessage, successMessage, reset } =
+    useDeleteChapter();
 
+  // Handle success/error messages
+  useEffect(() => {
+    if (successMessage) {
+      message.success(successMessage);
+      reset();
+      onRefresh?.();
+    }
+    if (errorMessage) {
+      message.error(errorMessage);
+      reset();
+    }
+  }, [successMessage, errorMessage, reset, onRefresh]);
   const formatDate = (dateString?: string | null): string => {
     if (!dateString) {
       return "-";
@@ -59,8 +76,17 @@ function ChapterList({
     });
   };
 
-  const handleDelete = (chapterId: string) => {
-    console.log("Delete chapter:", chapterId);
+  const handleDelete = (chapterSlug: string, chapterTitle: string) => {
+    Modal.confirm({
+      title: "Xác nhận xóa chương",
+      content: `Bạn có chắc chắn muốn xóa chương "${chapterTitle}"? Hành động này không thể hoàn tác.`,
+      okText: "Xóa",
+      okType: "danger",
+      cancelText: "Hủy",
+      onOk: async () => {
+        await deleteExistingChapter(bookSlug, chapterSlug);
+      },
+    });
   };
 
   const columns: ColumnsType<BookChapter> = [
@@ -78,9 +104,7 @@ function ChapterList({
       title: "Tên chương",
       dataIndex: "title",
       key: "title",
-      render: (title: string) => (
-        <span className="chapter-title">{title}</span>
-      ),
+      render: (title: string) => <span className="chapter-title">{title}</span>,
     },
     {
       title: "Ngày phát hành",
@@ -118,6 +142,7 @@ function ChapterList({
             icon={<Eye size={18} />}
             onClick={() => handleView(record.slug)}
             className="chapter-action-button"
+            disabled={isDeleting}
           >
             Xem
           </Button>
@@ -126,6 +151,7 @@ function ChapterList({
             icon={<Edit size={18} />}
             onClick={() => handleEdit(record.slug)}
             className="chapter-action-button"
+            disabled={isDeleting}
           >
             Sửa
           </Button>
@@ -133,8 +159,10 @@ function ChapterList({
             type="link"
             danger
             icon={<Trash2 size={18} />}
-            onClick={() => handleDelete(record.id)}
+            onClick={() => handleDelete(record.slug, record.title)}
             className="chapter-action-button"
+            loading={isDeleting}
+            disabled={isDeleting}
           >
             Xóa
           </Button>
@@ -166,4 +194,3 @@ function ChapterList({
 }
 
 export default ChapterList;
-

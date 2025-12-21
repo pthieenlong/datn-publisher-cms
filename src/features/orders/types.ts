@@ -1,4 +1,9 @@
-export type OrderStatus = "PAID" | "PENDING" | "CANCELLED" | "REFUNDED" | "ERROR";
+export type OrderStatus =
+  | "PAID"
+  | "PENDING"
+  | "CANCELLED"
+  | "REFUNDED"
+  | "ERROR";
 
 export type PayingMethod = "BANKING" | "MOMO" | "VNPAY";
 
@@ -11,6 +16,7 @@ export interface OrderItem {
 
 export interface Order {
   id: string;
+  orderCode?: string;
   userId: string;
   userName: string;
   totalAmount: number;

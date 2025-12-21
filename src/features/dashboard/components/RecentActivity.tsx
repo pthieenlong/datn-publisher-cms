@@ -42,8 +42,10 @@ function RecentActivity({ orders }: RecentActivityProps) {
         return "#faad14";
       case "CANCELLED":
         return "#ef4444";
-      case "FAILED":
+      case "ERROR":
         return "#ef4444";
+      case "REFUNDED":
+        return "#3b82f6";
       default:
         return "#6b7280";
     }
@@ -57,15 +59,17 @@ function RecentActivity({ orders }: RecentActivityProps) {
         return "Đang xử lý";
       case "CANCELLED":
         return "Đã hủy";
-      case "FAILED":
-        return "Thất bại";
+      case "ERROR":
+        return "Lỗi thanh toán";
+      case "REFUNDED":
+        return "Đã hoàn tiền";
       default:
         return status;
     }
   };
 
   const tableData: IOrderTable[] = orders.map((order) => ({
-    id: order.id,
+    id: order.orderCode || order.id,
     bookName:
       order.orderItems.length > 0
         ? order.orderItems.length === 1
@@ -85,11 +89,9 @@ function RecentActivity({ orders }: RecentActivityProps) {
       title: "Mã đơn hàng",
       dataIndex: "id",
       key: "id",
-      width: 200,
+      width: 180,
       render: (id: string) => (
-        <span style={{ fontFamily: "monospace", fontSize: "12px" }}>
-          {id.substring(0, 8)}...
-        </span>
+        <span style={{ fontFamily: "monospace", fontSize: "12px" }}>{id}</span>
       ),
     },
     {

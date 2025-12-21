@@ -255,5 +255,40 @@
       }
     }
   }
+
+  &__content-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-lg;
+    margin-bottom: $spacing-lg;
+
+    @media (max-width: 1200px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__reviews-comments {
+    min-height: 400px;
+  }
+
+  &__chapters {
+    min-height: 400px;
+  }
+
+  &__loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+  }
+
+  &__error {
+    margin-bottom: $spacing-lg;
+  }
+
+  &__empty {
+    text-align: center;
+    padding: $spacing-xl;
+  }
 }
 

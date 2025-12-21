@@ -48,8 +48,10 @@ function OrderTable({
         return "#faad14";
       case "CANCELLED":
         return "#ef4444";
-      case "FAILED":
+      case "ERROR":
         return "#ef4444";
+      case "REFUNDED":
+        return "#3b82f6";
       default:
         return "#6b7280";
     }
@@ -63,25 +65,12 @@ function OrderTable({
         return "Đang chờ";
       case "CANCELLED":
         return "Đã hủy";
-      case "FAILED":
-        return "Thất bại";
+      case "ERROR":
+        return "Lỗi thanh toán";
+      case "REFUNDED":
+        return "Đã hoàn tiền";
       default:
         return status;
-    }
-  };
-
-  const getPayingMethodText = (method: Order["payingMethod"]): string => {
-    switch (method) {
-      case "BANKING":
-        return "Chuyển khoản";
-      case "VNPAY":
-        return "VNPay";
-      case "MOMO":
-        return "MoMo";
-      case "CASH":
-        return "Tiền mặt";
-      default:
-        return method;
     }
   };
 
@@ -106,25 +95,13 @@ function OrderTable({
     {
       title: "Thông tin đơn hàng",
       key: "orderInfo",
-      width: 350,
+      width: 240,
       render: (_, record) => (
         <div className="order-info-cell">
           <div className="order-info-content">
-            <h3 className="order-customer-name">
+            <h4 className="order-customer-name">
               {record.userName || "Khách hàng"}
-            </h3>
-            <div className="order-items-list">
-              {record.orderItems.map((item, index) => (
-                <div key={item.id} className="order-item">
-                  <span className="order-item-title">
-                    {index + 1}. {item.bookTitle}
-                  </span>
-                  <span className="order-item-price">
-                    {formatCurrency(item.defaultPrice)}
-                  </span>
-                </div>
-              ))}
-            </div>
+            </h4>
           </div>
         </div>
       ),
@@ -137,18 +114,6 @@ function OrderTable({
       align: "right",
       render: (value: number) => (
         <span className="order-amount">{formatCurrency(value)}</span>
-      ),
-    },
-    {
-      title: "Phương thức",
-      dataIndex: "payingMethod",
-      key: "payingMethod",
-      width: 120,
-      align: "center",
-      render: (method: Order["payingMethod"]) => (
-        <span className="order-paying-method">
-          {getPayingMethodText(method)}
-        </span>
       ),
     },
     {
@@ -187,7 +152,7 @@ function OrderTable({
     {
       title: "Thao tác",
       key: "actions",
-      width: 120,
+      width: 160,
       align: "center",
       fixed: "right",
       render: (_, record) => (

@@ -1,9 +1,7 @@
-import { Card, Table, Typography } from "antd";
+import { Card, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import type { OrderDetailItem } from "@/features/orders/types";
 import "./OrderItemsTable.scss";
-
-const { Text } = Typography;
 
 export interface OrderItemsTableProps {
   items: OrderDetailItem[];
@@ -45,17 +43,6 @@ export default function OrderItemsTable({ items }: OrderItemsTableProps) {
       key: "discountPrice",
       align: "right",
       render: (value: number) => formatCurrency(value),
-    },
-    {
-      title: "Giá cuối cùng",
-      dataIndex: "finalPrice",
-      key: "finalPrice",
-      align: "right",
-      render: (value: number) => (
-        <Text strong style={{ color: "#1890ff" }}>
-          {formatCurrency(value)}
-        </Text>
-      ),
     },
   ];
 
