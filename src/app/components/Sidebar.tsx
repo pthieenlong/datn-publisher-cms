@@ -1,7 +1,7 @@
 import type React from "react";
 import { Layout, Menu } from "antd";
 import { useNavigate, useRouterState } from "@tanstack/react-router";
-import { Home, BookOpen, Settings, ShoppingCart } from "lucide-react";
+import { Home, BookOpen, ShoppingCart } from "lucide-react";
 import type { MenuProps } from "antd";
 import { LAYOUT_CONSTANTS } from "../constants";
 
@@ -32,12 +32,6 @@ const menuItemsConfig: IMenuItem[] = [
     path: "/orders",
     icon: <ShoppingCart size={20} />,
     label: "Quản lý đơn hàng",
-  },
-  {
-    key: "settings",
-    path: "/settings",
-    icon: <Settings size={20} />,
-    label: "Cài đặt",
   },
 ];
 

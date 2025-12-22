@@ -1,6 +1,6 @@
 import { Layout, Dropdown, Avatar, Space } from "antd";
 import { useNavigate } from "@tanstack/react-router";
-import { User, LogOut, Settings } from "lucide-react";
+import { User, LogOut } from "lucide-react";
 import type { MenuProps } from "antd";
 import { useState } from "react";
 import { useAppStore } from "@/app/store";
@@ -73,11 +73,6 @@ function Header() {
       key: "profile",
       icon: <User size={16} />,
       label: "Thông tin cá nhân",
-    },
-    {
-      key: "settings",
-      icon: <Settings size={16} />,
-      label: "Cài đặt",
     },
     {
       type: "divider",
