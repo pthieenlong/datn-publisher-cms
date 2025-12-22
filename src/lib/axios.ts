@@ -3,10 +3,10 @@ import axios from "axios";
 
 // Get API URL from environment variable, fallback to default
 // In development: use proxy /api
-// In production: use VITE_API_URL from build args
+// In production: use VITE_API_URL from build args (HTTPS for production)
 const API_URL = import.meta.env.DEV
   ? "/api"
-  : (import.meta.env.VITE_API_URL || "http://180.93.42.9:3000");
+  : (import.meta.env.VITE_API_URL || "https://api.mangareader.io.vn");
 
 if (import.meta.env.DEV) {
   console.log("🔧 [Axios] Using proxy path:", API_URL);
