@@ -256,6 +256,25 @@
     }
   }
 
+  &__info-purchase-grid {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: $spacing-lg;
+    margin-bottom: $spacing-lg;
+
+    @media (max-width: 1200px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__info {
+    min-height: 200px;
+  }
+
+  &__purchase {
+    min-height: 200px;
+  }
+
   &__content-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -267,7 +286,7 @@
     }
   }
 
-  &__reviews-comments {
+  &__user-interactions {
     min-height: 400px;
   }
 

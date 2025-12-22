@@ -10,7 +10,8 @@ import {
   BookDetailStats,
   BookDetailInfo,
   BookDetailChapters,
-  BookDetailReviewsComments,
+  BookDetailUserInteractions,
+  BookPurchaseStatsCard,
 } from "./components";
 import type { BookUpdateFormValues, PricingInfo } from "./components";
 import "./BookDetailPage.scss";
@@ -200,17 +201,28 @@ export default function BookDetailPage() {
             statusText={statusInfo.text}
           />
 
-          <BookDetailInfo
-            book={book}
-            statusColor={statusInfo.color}
-            statusText={statusInfo.text}
-            onThumbnailChange={handleThumbnailChange}
-            isUpdatingThumbnail={isUpdatingThumbnail}
-          />
+          <div className="book-detail-page__info-purchase-grid">
+            <div className="book-detail-page__info">
+              <BookDetailInfo
+                book={book}
+                statusColor={statusInfo.color}
+                statusText={statusInfo.text}
+                onThumbnailChange={handleThumbnailChange}
+                isUpdatingThumbnail={isUpdatingThumbnail}
+              />
+            </div>
+            <div className="book-detail-page__purchase">
+              <BookPurchaseStatsCard
+                totalPurchases={book.totalPurchases}
+                purchasedUsers={book.purchasedUsers}
+              />
+            </div>
+          </div>
 
           <div className="book-detail-page__content-grid">
-            <div className="book-detail-page__reviews-comments">
-              <BookDetailReviewsComments
+            <div className="book-detail-page__user-interactions">
+              <BookDetailUserInteractions
+                purchasedUsers={book.purchasedUsers}
                 ratings={book.ratings}
                 comments={book.comments}
                 loading={isLoading}

@@ -112,6 +112,16 @@ export default function BookDetailInfo({
                   <Tag color={statusColor}>{statusText}</Tag>
                 </div>
                 <div className="book-detail-info__meta-item">
+                  <Text strong>Loại subscription:</Text>
+                  <Tag color="purple">
+                    {book.subscriptionType === "BOTH"
+                      ? "Cả sách & chương"
+                      : book.subscriptionType === "BOOK"
+                      ? "Chỉ sách"
+                      : "Chỉ chương"}
+                  </Tag>
+                </div>
+                <div className="book-detail-info__meta-item">
                   <Text strong>Ngày tạo:</Text>
                   <Text>{formatDate(book.createdAt)}</Text>
                 </div>

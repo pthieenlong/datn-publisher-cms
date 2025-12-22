@@ -1,0 +1,28 @@
+.purchased-users-table {
+  &__email {
+    font-size: 12px;
+  }
+
+  &__order-code {
+    font-family: monospace;
+    font-size: 12px;
+  }
+
+  &__price {
+    color: #10b981;
+    font-size: 14px;
+  }
+
+  .ant-table {
+    font-size: 14px;
+  }
+
+  .ant-table-thead > tr > th {
+    background-color: #f9fafb;
+    font-weight: 600;
+  }
+
+  .ant-table-tbody > tr:hover > td {
+    background-color: #f0f9ff;
+  }
+}

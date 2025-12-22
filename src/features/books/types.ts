@@ -92,7 +92,7 @@ export interface BookReview {
 
 export interface BookRatingUser {
   id: string;
-  avatar: string;
+  avatar: string | null;
   username: string;
 }
 
@@ -115,6 +115,16 @@ export interface BookComment {
   updatedAt: string;
 }
 
+export interface PurchasedUser {
+  id: string;
+  username: string;
+  email: string;
+  avatar: string | null;
+  purchasedAt: string;
+  pricePaid: number;
+  orderCode: string;
+}
+
 export interface BookDetail {
   id: string;
   publisherId: string;
@@ -131,6 +141,7 @@ export interface BookDetail {
   price: number;
   isOnSale: boolean;
   salePercent: number;
+  subscriptionType: "BOTH" | "CHAPTER" | "BOOK";
   updatedAt: string;
   createdAt: string;
   deletedAt: string | null;
@@ -140,6 +151,8 @@ export interface BookDetail {
   reviews: BookReview[];
   ratings?: BookRating[];
   comments?: BookComment[];
+  purchasedUsers: PurchasedUser[];
+  totalPurchases: number;
 }
 
 export interface BookDetailResponse {
