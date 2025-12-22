@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  publisher-cms:
+    image: ghcr.io/pthieenlong/datn-publisher-cms:${IMAGE_TAG:-latest}
+    container_name: datn-publisher-cms
+    pull_policy: always
+    ports:
+      - "5174:5174"
+    networks:
+      - datn_network
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  datn_network:
+    external: true
