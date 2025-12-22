@@ -1,14 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 
-// Sử dụng proxy trong development để tránh vấn đề SameSite cookie
-// In development, use /api which will be proxied by Vite
-// In production, use the full API URL
-const API_URL = import.meta.env.DEV ? "/api" : "http://localhost:3000";
+// Get API URL from environment variable, fallback to default
+// In development: use proxy /api
+// In production: use VITE_API_URL from build args
+const API_URL = import.meta.env.DEV
+  ? "/api"
+  : (import.meta.env.VITE_API_URL || "http://180.93.42.9:3000");
 
 if (import.meta.env.DEV) {
   console.log("🔧 [Axios] Using proxy path:", API_URL);
-  console.log("🔧 [Axios] Vite will proxy /api requests to http://localhost:3000");
+  console.log("🔧 [Axios] Vite will proxy /api requests to backend");
+} else {
+  console.log("🔧 [Axios] Using API URL:", API_URL);
 }
 
 const axiosInstance = axios.create({
