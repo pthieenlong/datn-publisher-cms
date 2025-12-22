@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useAppStore } from "@/app/store";
 import { useToast } from "@/hooks/useToast";
 import { logoutRequest } from "@/features/auth/services/auth.service";
+import NotificationBell from "@/features/notifications/components/NotificationBell";
 
 const { Header: AntHeader } = Layout;
 
@@ -98,22 +99,25 @@ function Header() {
       <div className="header-content">
         <div className="header-left"></div>
         <div className="header-right">
-          <Dropdown
-            menu={{ items: userMenuItems, onClick: handleMenuClick }}
-            placement="bottomRight"
-            trigger={["click"]}
-          >
-            <Space className="user-dropdown" style={{ cursor: "pointer" }}>
-              <Avatar
-                size={32}
-                src={avatarSrc}
-                style={{ backgroundColor: "#3b82f6" }}
-              >
-                {displayInitials}
-              </Avatar>
-              <span className="user-name">{displayName}</span>
-            </Space>
-          </Dropdown>
+          <Space size="middle">
+            <NotificationBell />
+            <Dropdown
+              menu={{ items: userMenuItems, onClick: handleMenuClick }}
+              placement="bottomRight"
+              trigger={["click"]}
+            >
+              <Space className="user-dropdown" style={{ cursor: "pointer" }}>
+                <Avatar
+                  size={32}
+                  src={avatarSrc}
+                  style={{ backgroundColor: "#3b82f6" }}
+                >
+                  {displayInitials}
+                </Avatar>
+                <span className="user-name">{displayName}</span>
+              </Space>
+            </Dropdown>
+          </Space>
         </div>
       </div>
     </AntHeader>
