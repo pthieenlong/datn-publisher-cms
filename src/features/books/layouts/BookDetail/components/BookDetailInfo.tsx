@@ -1,4 +1,6 @@
-import { Row, Col, Card, Typography, Tag, Space } from "antd";
+import { Row, Col, Card, Typography, Tag, Space, Button, Upload } from "antd";
+import { CameraOutlined } from "@ant-design/icons";
+import type { UploadProps } from "antd";
 import type { BookDetail } from "@/features/books/types";
 import "./BookDetailInfo.scss";
 
@@ -8,12 +10,16 @@ export interface BookDetailInfoProps {
   book: BookDetail;
   statusColor: string;
   statusText: string;
+  onThumbnailChange?: (file: File) => void;
+  isUpdatingThumbnail?: boolean;
 }
 
 export default function BookDetailInfo({
   book,
   statusColor,
   statusText,
+  onThumbnailChange,
+  isUpdatingThumbnail = false,
 }: BookDetailInfoProps) {
   const formatDate = (dateString?: string | null): string => {
     if (!dateString) {
@@ -27,6 +33,25 @@ export default function BookDetailInfo({
     }).format(date);
   };
 
+  const uploadProps: UploadProps = {
+    beforeUpload: (file) => {
+      const isImage = file.type === "image/jpeg" || file.type === "image/png" || file.type === "image/jpg";
+      if (!isImage) {
+        return Upload.LIST_IGNORE;
+      }
+
+      const isLt5M = file.size / 1024 / 1024 < 5;
+      if (!isLt5M) {
+        return Upload.LIST_IGNORE;
+      }
+
+      onThumbnailChange?.(file);
+      return false;
+    },
+    showUploadList: false,
+    accept: ".jpg,.jpeg,.png",
+  };
+
   return (
     <div className="book-detail-info">
       <Card className="book-detail-info__card">
@@ -38,6 +63,18 @@ export default function BookDetailInfo({
                 alt={book.title}
                 className="book-detail-info__cover-image"
               />
+              <div className="book-detail-info__cover-actions">
+                <Upload {...uploadProps}>
+                  <Button
+                    type="primary"
+                    icon={<CameraOutlined />}
+                    loading={isUpdatingThumbnail}
+                    block
+                  >
+                    Thay đổi ảnh bìa
+                  </Button>
+                </Upload>
+              </div>
             </div>
           </Col>
           <Col xs={24} md={16}>

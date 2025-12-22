@@ -8,7 +8,9 @@
     margin-bottom: $spacing-lg;
     padding-bottom: $spacing-lg;
     border-bottom: 1px solid $border-color;
-
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     .chapter-detail-back-button {
       border-radius: $radius-md;
       font-family: "Poppins", sans-serif;

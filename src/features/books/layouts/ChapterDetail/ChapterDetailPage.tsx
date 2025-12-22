@@ -23,6 +23,8 @@ import "./ChapterDetailPage.scss";
 import { useDocumentTitle } from "@/hooks";
 import { useChapterDetail } from "../../hooks/useChapterDetail";
 import type { CarouselRef } from "antd/es/carousel";
+import { useDeleteChapter } from "../../hooks/useDeleteChapter";
+import { useUnarchiveChapter } from "../../hooks/useUnarchiveChapter";
 
 const { Title, Text } = Typography;
 const { PreviewGroup } = Image;
@@ -37,6 +39,9 @@ function ChapterDetailPage() {
       bookSlug,
       chapterSlug,
     });
+  const { isDeleting, deleteExistingChapter } = useDeleteChapter();
+  const { unarchiveExistingChapter } = useUnarchiveChapter();
+
   const carouselRef = useRef<CarouselRef | null>(null);
   const prevChapterIdRef = useRef<string | undefined>(undefined);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -84,18 +89,24 @@ function ChapterDetailPage() {
     });
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (!chapter) {
       return;
     }
-    console.log("Delete chapter:", chapter.id);
+    const success = await deleteExistingChapter(bookSlug, chapterSlug);
+    if (success) {
+      refetch();
+    }
   };
 
-  const handlePublish = () => {
+  const handlePublish = async () => {
     if (!chapter) {
       return;
     }
-    console.log("Publish/Stop chapter:", chapter.id);
+    const success = await unarchiveExistingChapter(bookSlug, chapterSlug);
+    if (success) {
+      refetch();
+    }
   };
 
   const statusInfo = getStatusTag(chapter?.status ?? "DRAFT");
@@ -144,23 +155,27 @@ function ChapterDetailPage() {
           >
             Chỉnh sửa
           </Button>
-          <Button
-            danger
-            icon={<Trash2 size={20} />}
-            onClick={handleDelete}
-            className="chapter-detail-action-button"
-          >
-            Xóa
-          </Button>
-          <Button
-            type={chapter?.status === "PUBLISHED" ? "default" : "primary"}
-            icon={<Eye size={20} />}
-            onClick={handlePublish}
-            className="chapter-detail-action-button"
-            disabled={!chapter}
-          >
-            {chapter?.status === "PUBLISHED" ? "Ngừng xuất bản" : "Xuất bản"}
-          </Button>
+          {chapter?.status !== "ARCHIVED" ? (
+            <Button
+              danger
+              icon={<Trash2 size={20} />}
+              onClick={handleDelete}
+              disabled={!chapter || isDeleting}
+              className="chapter-detail-action-button"
+            >
+              Lưu trữ
+            </Button>
+          ) : (
+            <Button
+              type="primary"
+              icon={<Eye size={20} />}
+              onClick={handlePublish}
+              className="chapter-detail-action-button"
+              disabled={!chapter}
+            >
+              Khôi phục
+            </Button>
+          )}
         </Space>
       </div>
 

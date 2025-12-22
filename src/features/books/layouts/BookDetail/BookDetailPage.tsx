@@ -14,6 +14,9 @@ import {
 } from "./components";
 import type { BookUpdateFormValues, PricingInfo } from "./components";
 import "./BookDetailPage.scss";
+import { useDeleteBook } from "../../hooks/useDeleteBook";
+import { useUnarchiveBook } from "../../hooks/useUnarchiveBook";
+import { useUpdateBookThumbnail } from "../../hooks/useUpdateBookThumbnail";
 
 const { Title, Text } = Typography;
 
@@ -36,7 +39,10 @@ export default function BookDetailPage() {
     isLoading: loadingCategories,
     errorMessage: categoriesError,
   } = useCategories();
-
+  const { deleteExistingBook } = useDeleteBook();
+  const { unarchiveExistingBook } = useUnarchiveBook();
+  const { updateThumbnail, isUpdating: isUpdatingThumbnail } =
+    useUpdateBookThumbnail();
   useDocumentTitle(
     book
       ? `${book.title} - Chi tiết Truyện tranh - CMS`
@@ -61,8 +67,25 @@ export default function BookDetailPage() {
     navigate({ to: "/books" });
   };
 
-  const handleDelete = () => {
-    // TODO: Implement delete functionality
+  const handleDelete = async () => {
+    if (!slug) {
+      return;
+    }
+    const success = await deleteExistingBook(slug);
+    console.log(success);
+    if (success) {
+      refetch();
+    }
+  };
+
+  const handleUnarchived = async () => {
+    if (!slug) {
+      return;
+    }
+    const success = await unarchiveExistingBook(slug);
+    if (success) {
+      refetch();
+    }
   };
 
   const handleUpdateSubmit = async (values: BookUpdateFormValues) => {
@@ -91,6 +114,16 @@ export default function BookDetailPage() {
       to: "/books/$bookSlug/create-chapter",
       params: { bookSlug: book.slug },
     });
+  };
+
+  const handleThumbnailChange = async (file: File) => {
+    if (!slug) {
+      return;
+    }
+    const success = await updateThumbnail(slug, file);
+    if (success) {
+      await refetch();
+    }
   };
 
   const statusInfo = getStatusTag(book?.status);
@@ -134,6 +167,7 @@ export default function BookDetailPage() {
         onBack={handleBack}
         onRefetch={refetch}
         onDelete={handleDelete}
+        onUnarchived={handleUnarchived}
         isBookLoaded={!!book}
         book={book}
         categories={categories}
@@ -170,6 +204,8 @@ export default function BookDetailPage() {
             book={book}
             statusColor={statusInfo.color}
             statusText={statusInfo.text}
+            onThumbnailChange={handleThumbnailChange}
+            isUpdatingThumbnail={isUpdatingThumbnail}
           />
 
           <div className="book-detail-page__content-grid">

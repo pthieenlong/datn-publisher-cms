@@ -4,10 +4,7 @@ import { useNavigate, useParams } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { useDocumentTitle } from "@/hooks";
 import { useChapterDetail } from "../../hooks/useChapterDetail";
-import { useUpdateChapter } from "../../hooks/useUpdateChapter";
 import { ChapterGalleriesEditor } from "../../components/ChapterGalleriesEditor";
-import { ChapterEditForm } from "./components";
-import type { ChapterEditFormValues } from "./components";
 import "./ChapterEditPage.scss";
 
 export default function ChapterEditPage() {
@@ -20,8 +17,6 @@ export default function ChapterEditPage() {
     bookSlug,
     chapterSlug,
   });
-
-  const { updateExistingChapter, isUpdating: isUpdatingMetadata } = useUpdateChapter();
 
   useDocumentTitle(`Chỉnh sửa Chương - CMS`);
 
@@ -36,31 +31,6 @@ export default function ChapterEditPage() {
       params: { bookSlug, chapterSlug },
     });
   };
-
-  const handleSubmit = async (values: ChapterEditFormValues) => {
-    if (!chapter) return;
-
-    // Update metadata (price, isFree, etc.)
-    // Note: title không thể cập nhật qua API này theo API docs
-    const payload = {
-      isFree: values.isFree,
-      price: values.isFree ? 0 : values.price,
-      isOnSale: values.isFree ? false : values.isOnSale,
-      salePercent: values.isFree || !values.isOnSale ? 0 : values.salePercent,
-    };
-
-    const metadataSuccess = await updateExistingChapter(
-      bookSlug,
-      chapterSlug,
-      payload
-    );
-
-    if (metadataSuccess) {
-      handleBack();
-    }
-  };
-
-  const isUpdating = isUpdatingMetadata;
 
   if (isLoading && !chapter) {
     return (
@@ -86,14 +56,6 @@ export default function ChapterEditPage() {
     );
   }
 
-  const initialValues: ChapterEditFormValues = {
-    title: chapter.title,
-    isFree: chapter.isFree ?? true,
-    price: chapter.price ?? 0,
-    isOnSale: chapter.isOnSale ?? false,
-    salePercent: chapter.salePercent ?? 0,
-  };
-
   return (
     <div className="chapter-edit-page">
       {/* Header */}
@@ -102,7 +64,6 @@ export default function ChapterEditPage() {
           <Button
             icon={<ArrowLeft size={20} />}
             onClick={handleBack}
-            disabled={isUpdating}
             className="chapter-edit-page__back-button"
           >
             Quay lại
@@ -125,16 +86,6 @@ export default function ChapterEditPage() {
           mode="standalone"
           showSaveButton={true}
           onSuccess={refetch}
-        />
-      </div>
-
-      {/* Metadata Form */}
-      <div className="chapter-edit-page__section">
-        <ChapterEditForm
-          initialValues={initialValues}
-          isLoading={isUpdatingMetadata}
-          onSubmit={handleSubmit}
-          onCancel={handleBack}
         />
       </div>
     </div>

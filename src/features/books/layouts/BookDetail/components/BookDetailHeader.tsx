@@ -13,7 +13,7 @@ import {
   Col,
   message,
 } from "antd";
-import { ArrowLeft, Trash2, Edit3 } from "lucide-react";
+import { ArrowLeft, Trash2, Edit3, RefreshCcw } from "lucide-react";
 import type { Category } from "@/features/categories/types";
 import type { BookDetail } from "@/features/books/types";
 import "./BookDetailHeader.scss";
@@ -36,6 +36,7 @@ export interface BookUpdateFormValues {
 export interface BookDetailHeaderProps {
   onBack: () => void;
   onRefetch: () => void;
+  onUnarchived: () => void;
   onDelete: () => void;
   isBookLoaded: boolean;
   book: BookDetail | null;
@@ -47,6 +48,7 @@ export default function BookDetailHeader({
   onBack,
   onRefetch,
   onDelete,
+  onUnarchived,
   isBookLoaded,
   book,
   categories,
@@ -156,7 +158,9 @@ export default function BookDetailHeader({
             <Form.Item
               label="% Giảm giá"
               name="salePercent"
-              rules={[{ type: "number", min: 0, max: 100, message: "Từ 0-100%" }]}
+              rules={[
+                { type: "number", min: 0, max: 100, message: "Từ 0-100%" },
+              ]}
             >
               <InputNumber<number>
                 style={{ width: "100%" }}
@@ -242,15 +246,25 @@ export default function BookDetailHeader({
             Cập nhật thông tin
           </Button>
         </Popover>
-        <Button
-          danger
-          icon={<Trash2 size={20} />}
-          className="book-detail-header__action-button"
-          disabled={!isBookLoaded}
-          onClick={onDelete}
-        >
-          Xóa
-        </Button>
+        {book?.status === "ARCHIVED" ? (
+          <Button
+            icon={<RefreshCcw size={20} />}
+            className="book-detail-header__action-button"
+            onClick={onUnarchived}
+          >
+            Khôi phục
+          </Button>
+        ) : (
+          <Button
+            danger
+            icon={<Trash2 size={20} />}
+            className="book-detail-header__action-button"
+            disabled={!isBookLoaded}
+            onClick={onDelete}
+          >
+            Xóa
+          </Button>
+        )}
       </Space>
     </div>
   );

@@ -13,7 +13,10 @@ import type {
   UpdateChapterPayload,
   UpdateChapterResponse,
   DeleteChapterResponse,
+  UnarchiveChapterResponse,
   DeleteBookResponse,
+  UnarchiveBookResponse,
+  UpdateBookThumbnailResponse,
 } from "../types";
 
 export async function fetchBooks(
@@ -97,6 +100,36 @@ export async function createBook(
 export async function deleteBook(slug: string): Promise<DeleteBookResponse> {
   const endpoint = `/cms/publisher/books/${encodeURIComponent(slug)}`;
   const response = await axiosInstance.delete<DeleteBookResponse>(endpoint);
+
+  return response.data;
+}
+
+export async function unarchiveBook(
+  slug: string
+): Promise<UnarchiveBookResponse> {
+  const endpoint = `/cms/publisher/books/${encodeURIComponent(slug)}`;
+  const response = await axiosInstance.post<UnarchiveBookResponse>(endpoint);
+
+  return response.data;
+}
+
+export async function updateBookThumbnail(
+  slug: string,
+  thumbnail: File
+): Promise<UpdateBookThumbnailResponse> {
+  const formData = new FormData();
+  formData.append("thumbnail", thumbnail);
+
+  const endpoint = `/cms/publisher/books/${encodeURIComponent(slug)}`;
+  const response = await axiosInstance.patch<UpdateBookThumbnailResponse>(
+    endpoint,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
 
   return response.data;
 }
@@ -203,5 +236,19 @@ export async function deleteChapter(
   const response = await axiosInstance.delete<DeleteChapterResponse>(endpoint);
   console.log(response);
 
+  return response.data;
+}
+
+export async function unarchiveChapter(
+  bookSlug: string,
+  chapterSlug: string
+): Promise<UnarchiveChapterResponse> {
+  const endpoint = `/cms/publisher/books/${encodeURIComponent(
+    bookSlug
+  )}/chapters/${encodeURIComponent(chapterSlug)}`;
+  const response = await axiosInstance.patch<UnarchiveChapterResponse>(
+    endpoint
+  );
+  console.log(response);
   return response.data;
 }

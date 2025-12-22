@@ -260,6 +260,12 @@ export interface DeleteChapterResponse {
   message: string;
 }
 
+export interface UnarchiveChapterResponse {
+  httpCode: number;
+  success: boolean;
+  message: string;
+}
+
 // Delete Book types
 export interface DeleteBookResponse {
   httpCode: number;
@@ -270,6 +276,21 @@ export interface DeleteBookResponse {
       id: string;
       title: string;
     };
+  };
+}
+
+export interface UnarchiveBookResponse {
+  httpCode: number;
+  success: boolean;
+  message: string;
+}
+
+export interface UpdateBookThumbnailResponse {
+  httpCode: number;
+  success: boolean;
+  message: string;
+  data: {
+    thumbnail: string;
   };
 }
 

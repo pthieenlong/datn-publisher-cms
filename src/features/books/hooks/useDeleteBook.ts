@@ -6,7 +6,9 @@ interface UseDeleteBookReturn {
   isDeleting: boolean;
   errorMessage: string | null;
   successMessage: string | null;
-  deleteExistingBook: (slug: string) => Promise<DeleteBookResponse["data"] | null>;
+  deleteExistingBook: (
+    slug: string
+  ) => Promise<DeleteBookResponse["data"] | null>;
   reset: () => void;
 }
 
@@ -23,13 +25,12 @@ export function useDeleteBook(): UseDeleteBookReturn {
 
       try {
         const response = await deleteBook(slug);
+        console.log(response);
         setSuccessMessage(response.message || "Xóa truyện thành công");
         return response.data;
       } catch (error) {
         const message =
-          error instanceof Error
-            ? error.message
-            : "Không thể xóa truyện";
+          error instanceof Error ? error.message : "Không thể xóa truyện";
         setErrorMessage(message);
         return null;
       } finally {

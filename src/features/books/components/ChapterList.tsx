@@ -28,8 +28,13 @@ function ChapterList({
   onRefresh,
 }: ChapterListProps) {
   const navigate = useNavigate();
-  const { deleteExistingChapter, isDeleting, errorMessage, successMessage, reset } =
-    useDeleteChapter();
+  const {
+    deleteExistingChapter,
+    isDeleting,
+    errorMessage,
+    successMessage,
+    reset,
+  } = useDeleteChapter();
 
   // Handle success/error messages
   useEffect(() => {
@@ -143,18 +148,14 @@ function ChapterList({
             onClick={() => handleView(record.slug)}
             className="chapter-action-button"
             disabled={isDeleting}
-          >
-            Xem
-          </Button>
+          ></Button>
           <Button
             type="link"
             icon={<Edit size={18} />}
             onClick={() => handleEdit(record.slug)}
             className="chapter-action-button"
             disabled={isDeleting}
-          >
-            Sửa
-          </Button>
+          ></Button>
           <Button
             type="link"
             danger
@@ -163,9 +164,7 @@ function ChapterList({
             className="chapter-action-button"
             loading={isDeleting}
             disabled={isDeleting}
-          >
-            Xóa
-          </Button>
+          ></Button>
         </Space>
       ),
     },
