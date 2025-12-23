@@ -113,6 +113,8 @@ export interface BookComment {
   content: string;
   createdAt: string;
   updatedAt: string;
+  parentId?: string | null;
+  replies?: BookComment[];
 }
 
 export interface PurchasedUser {
