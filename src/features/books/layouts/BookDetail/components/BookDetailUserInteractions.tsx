@@ -1,9 +1,13 @@
 import { Card, Tabs, Typography } from "antd";
 import { MessageSquare, Star, ShoppingBag } from "lucide-react";
 import ReviewsTable from "./ReviewsTable";
-import CommentsTable from "./CommentsTable";
+import ThreadedCommentsList from "./ThreadedCommentsList";
 import PurchasedUsersTable from "./PurchasedUsersTable";
-import type { BookRating, BookComment, PurchasedUser } from "@/features/books/types";
+import type {
+  BookRating,
+  BookComment,
+  PurchasedUser,
+} from "@/features/books/types";
 import "./BookDetailUserInteractions.scss";
 
 const { Title } = Typography;
@@ -13,6 +17,8 @@ export interface BookDetailUserInteractionsProps {
   ratings?: BookRating[];
   comments?: BookComment[];
   loading?: boolean;
+  onDeleteComment?: (commentId: string, userId: string) => void;
+  deletingCommentId?: string;
 }
 
 export default function BookDetailUserInteractions({
@@ -20,6 +26,8 @@ export default function BookDetailUserInteractions({
   ratings = [],
   comments = [],
   loading = false,
+  onDeleteComment,
+  deletingCommentId,
 }: BookDetailUserInteractionsProps) {
   const tabItems = [
     {
@@ -30,7 +38,12 @@ export default function BookDetailUserInteractions({
           Người mua ({purchasedUsers.length})
         </span>
       ),
-      children: <PurchasedUsersTable purchasedUsers={purchasedUsers} loading={loading} />,
+      children: (
+        <PurchasedUsersTable
+          purchasedUsers={purchasedUsers}
+          loading={loading}
+        />
+      ),
     },
     {
       key: "reviews",
@@ -50,7 +63,14 @@ export default function BookDetailUserInteractions({
           Bình luận ({comments.length})
         </span>
       ),
-      children: <CommentsTable comments={comments} loading={loading} />,
+      children: (
+        <ThreadedCommentsList
+          comments={comments}
+          loading={loading}
+          onDeleteComment={onDeleteComment}
+          deletingCommentId={deletingCommentId}
+        />
+      ),
     },
   ];
 

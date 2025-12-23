@@ -17,6 +17,7 @@ import type {
   DeleteBookResponse,
   UnarchiveBookResponse,
   UpdateBookThumbnailResponse,
+  DeleteCommentResponse,
 } from "../types";
 
 export async function fetchBooks(
@@ -250,5 +251,17 @@ export async function unarchiveChapter(
     endpoint
   );
   console.log(response);
+  return response.data;
+}
+
+export async function deleteComment(
+  bookSlug: string,
+  commentId: string,
+  userId: string
+): Promise<DeleteCommentResponse> {
+  const endpoint = `/cms/publisher/books/${encodeURIComponent(
+    bookSlug
+  )}/comment/${commentId}/${userId}`;
+  const response = await axiosInstance.delete<DeleteCommentResponse>(endpoint);
   return response.data;
 }

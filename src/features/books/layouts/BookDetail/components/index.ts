@@ -28,5 +28,8 @@ export type { ReviewsTableProps } from "./ReviewsTable";
 export { default as CommentsTable } from "./CommentsTable";
 export type { CommentsTableProps } from "./CommentsTable";
 
+export { default as ThreadedCommentsList } from "./ThreadedCommentsList";
+export type { ThreadedCommentsListProps } from "./ThreadedCommentsList";
+
 export { default as PurchasedUsersTable } from "./PurchasedUsersTable";
 export type { PurchasedUsersTableProps } from "./PurchasedUsersTable";

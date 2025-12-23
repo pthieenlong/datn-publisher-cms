@@ -332,3 +332,9 @@ export interface ReorderImagesResponse {
   success: boolean;
   message: string;
 }
+
+export interface DeleteCommentResponse {
+  httpCode: number;
+  success: boolean;
+  message: string;
+}

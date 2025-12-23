@@ -1,6 +1,6 @@
 import { Alert, Spin, Card, Typography, message } from "antd";
 import { useNavigate, useParams } from "@tanstack/react-router";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useDocumentTitle } from "@/hooks";
 import { useBookDetail } from "../../hooks/useBookDetail";
 import { useCategories } from "@/features/categories";
@@ -18,6 +18,7 @@ import "./BookDetailPage.scss";
 import { useDeleteBook } from "../../hooks/useDeleteBook";
 import { useUnarchiveBook } from "../../hooks/useUnarchiveBook";
 import { useUpdateBookThumbnail } from "../../hooks/useUpdateBookThumbnail";
+import { useDeleteComment } from "../../hooks/useDeleteComment";
 
 const { Title, Text } = Typography;
 
@@ -44,6 +45,12 @@ export default function BookDetailPage() {
   const { unarchiveExistingBook } = useUnarchiveBook();
   const { updateThumbnail, isUpdating: isUpdatingThumbnail } =
     useUpdateBookThumbnail();
+  const { deleteComment } = useDeleteComment({
+    bookSlug: slug,
+    onSuccess: refetch,
+  });
+  const [deletingCommentId, setDeletingCommentId] = useState<string>();
+
   useDocumentTitle(
     book
       ? `${book.title} - Chi tiết Truyện tranh - CMS`
@@ -125,6 +132,12 @@ export default function BookDetailPage() {
     if (success) {
       await refetch();
     }
+  };
+
+  const handleDeleteComment = async (commentId: string, userId: string) => {
+    setDeletingCommentId(commentId);
+    await deleteComment(commentId, userId);
+    setDeletingCommentId(undefined);
   };
 
   const statusInfo = getStatusTag(book?.status);
@@ -226,6 +239,8 @@ export default function BookDetailPage() {
                 ratings={book.ratings}
                 comments={book.comments}
                 loading={isLoading}
+                onDeleteComment={handleDeleteComment}
+                deletingCommentId={deletingCommentId}
               />
             </div>
             <div className="book-detail-page__chapters">
