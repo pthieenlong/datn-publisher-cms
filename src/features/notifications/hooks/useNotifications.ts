@@ -14,6 +14,7 @@ export function useNotifications(initialFilters?: INotificationFilter) {
     totalPage: 1,
     totalItems: 0,
   });
+  const [unreadCount, setUnreadCount] = useState(0);
   const [filters, setFilters] = useState<INotificationFilter>({
     page: 1,
     limit: 10,
@@ -26,11 +27,24 @@ export function useNotifications(initialFilters?: INotificationFilter) {
     try {
       const response = await notificationService.getNotifications(filters);
       if (response.success && response.data) {
-        const nextNotifications = response.data as INotification[];
-        setNotifications(nextNotifications);
-        if (response.pagination) {
-          setPagination(response.pagination as Pagination);
-        }
+        const data = response.data as {
+          notifications: INotification[];
+          totalNotifications: number;
+          unreadCount: number;
+          pagination: {
+            page: number;
+            limit: number;
+            totalPages: number;
+          };
+        };
+        setNotifications(data.notifications);
+        setUnreadCount(data.unreadCount);
+        setPagination({
+          page: data.pagination.page,
+          limit: data.pagination.limit,
+          totalPage: data.pagination.totalPages,
+          totalItems: data.totalNotifications,
+        });
       } else {
         const errorMessage =
           response.message || "Không thể tải danh sách thông báo.";
@@ -68,6 +82,7 @@ export function useNotifications(initialFilters?: INotificationFilter) {
     error,
     pagination,
     filters,
+    unreadCount,
     refetch: fetchNotifications,
     updateFilters,
   };

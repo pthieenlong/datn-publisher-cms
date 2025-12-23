@@ -7,10 +7,13 @@ export function useUnreadCount(refetchInterval = 30000) {
 
   const fetchUnreadCount = useCallback(async () => {
     try {
-      const response = await notificationService.getUnreadCount();
+      const response = await notificationService.getNotifications({
+        page: 1,
+        limit: 1,
+      });
       if (response.success && response.data) {
-        const count = (response.data as { count: number }).count || 0;
-        setUnreadCount(count);
+        const data = response.data as { unreadCount: number };
+        setUnreadCount(data.unreadCount || 0);
       }
     } catch (err) {
       console.error("Failed to fetch unread count:", err);
